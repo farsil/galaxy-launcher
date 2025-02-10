@@ -12,11 +12,23 @@ public class MainWindowViewModel : ObservableRecipient, IRecipient<ProgramLoaded
 
     public ICollection<Program> Programs { get; } = new ObservableCollection<Program>();
     
-    public MainWindowViewModel(IMessenger messenger) : base(messenger)
+    public MainWindowViewModel() : base(App.Messenger)
     {
         BindingOperations.EnableCollectionSynchronization(Programs, _programsLock);
     }
 
+    protected override void OnActivated()
+    {
+        base.OnActivated();
+        Messenger.Send(new MainWindowActivationChangeMessage(true));
+    }
+    
+    protected override void OnDeactivated()
+    {
+        base.OnDeactivated();
+        Messenger.Send(new MainWindowActivationChangeMessage(false));
+    }
+    
     public void Receive(ProgramLoadedMessage message)
     {
         lock (_programsLock)
