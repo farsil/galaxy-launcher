@@ -1,0 +1,10 @@
+# Build
+bin/
+obj/
+/packages/
+
+# IDE
+/_ReSharper.Caches/
+.idea
+riderModule.iml
+*.sln.DotSettings.user
