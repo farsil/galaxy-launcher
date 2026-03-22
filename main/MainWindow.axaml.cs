@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Messaging;
 using DosboxLauncher.Loader;
 
@@ -30,13 +29,13 @@ public partial class MainWindow : Window
     
     private void OnOpened(object? sender, EventArgs e)
     {
-        Messenger.Instance.Register<ProgramLoadedMessage>(this, OnProgramLoadedMessageReceived);
-        Messenger.Instance.Send(new MainWindowStateChangeMessage(MainWindowState.Opened));
+        Messenger.Register<ProgramLoadedMessage>(this, OnProgramLoadedMessageReceived);
+        Messenger.Send(new MainWindowStateChangeMessage(MainWindowState.Opened));
     }
     
     private void OnClosed(object? sender, EventArgs e)
     {
-        Messenger.Instance.Send(new MainWindowStateChangeMessage(MainWindowState.Closed));
-        Messenger.Instance.UnregisterAll(this);
+        Messenger.Send(new MainWindowStateChangeMessage(MainWindowState.Closed));
+        Messenger.UnregisterAll(this);
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Threading;
-using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Messaging;
 
 namespace DosboxLauncher.Loader;
@@ -53,7 +52,7 @@ public class ProgramLoader
             if (_shouldStop) break;
             
             Console.WriteLine($"Loading directory {directory}");
-            Messenger.Instance.Send(new ProgramLoadedMessage(new Program
+            Messenger.Send(new ProgramLoadedMessage(new Program
             {
                 Path = directory, 
                 Title = GetTitle(directory),
