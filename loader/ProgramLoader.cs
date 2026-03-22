@@ -1,17 +1,20 @@
-﻿using System.IO;
+using System;
+using System.IO;
+using System.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using DosboxLauncher.Model;
 
-namespace DosboxLauncher;
+namespace DosboxLauncher.Loader;
 
 public class ProgramLoader
 {
     private volatile bool _shouldStop;
+    private readonly IMessenger _messenger;
     private readonly Thread _thread;
     private readonly string _programsDirectory;
 
-    public ProgramLoader(string baseDirectory)
+    public ProgramLoader(string baseDirectory, IMessenger messenger)
     {
+        _messenger = messenger;
         _programsDirectory = Path.Join(baseDirectory, "programs");
         _shouldStop = false;
         _thread = new Thread(Run);
@@ -51,7 +54,7 @@ public class ProgramLoader
             if (_shouldStop) break;
             
             Console.WriteLine($"Loading directory {directory}");
-            App.Messenger.Send(new ProgramLoadedMessage(new Program
+            _messenger.Send(new ProgramLoadedMessage(new Program
             {
                 Path = directory, 
                 Title = GetTitle(directory),

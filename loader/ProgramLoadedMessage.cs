@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Messaging.Messages;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 
-namespace DosboxLauncher.Model;
+namespace DosboxLauncher.Loader;
 
 public class ProgramLoadedMessage(Program program) : ValueChangedMessage<Program>(program);

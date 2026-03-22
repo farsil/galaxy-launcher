@@ -1,4 +1,4 @@
-﻿namespace DosboxLauncher.Model;
+namespace DosboxLauncher.Loader;
 
 public sealed record Program
 {
