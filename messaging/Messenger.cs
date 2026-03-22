@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace DosboxLauncher.Common;
+namespace DosboxLauncher.Messaging;
 
 public static class Messenger
 {

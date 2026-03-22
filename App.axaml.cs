@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.Messaging;
-using DosboxLauncher.Common;
+using DosboxLauncher.Messaging;
 using DosboxLauncher.Loader;
 using DosboxLauncher.Main;
 

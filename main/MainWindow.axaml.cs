@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using DosboxLauncher.Common;
+using DosboxLauncher.Messaging;
 using DosboxLauncher.Loader;
-using Program = DosboxLauncher.Loader.Program;
 
 namespace DosboxLauncher.Main;
 

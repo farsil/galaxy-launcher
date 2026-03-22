@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using DosboxLauncher.Common;
+using DosboxLauncher.Messaging;
 
 namespace DosboxLauncher.Loader;
 
