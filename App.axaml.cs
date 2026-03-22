@@ -3,16 +3,15 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.Messaging;
+using DosboxLauncher.Common;
 using DosboxLauncher.Loader;
 using DosboxLauncher.Main;
 
-namespace DosboxLauncher.Launch;
+namespace DosboxLauncher.Startup;
 
 public partial class App : Application
 {
-    private static readonly StrongReferenceMessenger Messenger = StrongReferenceMessenger.Default;
-    
-    private readonly ProgramLoader _programLoader = new(".", Messenger);
+    private readonly ProgramLoader _programLoader = new(".");
     
     public override void Initialize()
     {
@@ -23,8 +22,8 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow(Messenger);
-            Messenger.Register<MainWindowStateChangeMessage>(this, OnMainWindowStateChangeMessageReceived);
+            desktop.MainWindow = new MainWindow();
+            Messenger.Instance.Register<MainWindowStateChangeMessage>(this, OnMainWindowStateChangeMessageReceived);
             desktop.Exit += OnDesktopExit; 
         }
         
@@ -33,7 +32,7 @@ public partial class App : Application
     
     private void OnDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-        Messenger.UnregisterAll(this);
+        Messenger.Instance.UnregisterAll(this);
     }
 
     private void OnMainWindowStateChangeMessageReceived(object recipient, MainWindowStateChangeMessage message)

@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace DosboxLauncher.Launch;
+namespace DosboxLauncher.Startup;
 
 class Program
 {
