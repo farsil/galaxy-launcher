@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Loader;
@@ -10,11 +12,28 @@ namespace DosboxLauncher.Main;
 public sealed class MainWindowViewModel()
     : ObservableRecipient(AppMessenger.Instance), IRecipient<ProgramLoadedMessage>
 {
-    public ICollection<Program> Programs { get; } = new ObservableCollection<Program>();
+    private readonly ObservableCollection<Program> _programs = [];
+
+    public IEnumerable<Program> FilteredPrograms =>
+        string.IsNullOrWhiteSpace(SearchText)
+            ? _programs
+            : _programs.Where(p => p.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+
+    public string SearchText
+    {
+        get;
+        set
+        {
+            if (field == value) return;
+            field = value;
+            OnPropertyChanged(nameof(FilteredPrograms));
+        }
+    } = string.Empty;
 
     public void Receive(ProgramLoadedMessage message)
     {
-        Programs.Add(message.Value);
+        _programs.Add(message.Value);
+        OnPropertyChanged(nameof(FilteredPrograms));
     }
 
     protected override void OnActivated()

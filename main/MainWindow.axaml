@@ -8,32 +8,38 @@
         x:Class="DosboxLauncher.Main.MainWindow"
         x:DataType="main:MainWindowViewModel"
         Title="Dosbox Launcher">
-    <ScrollViewer>
-        <ItemsControl ItemsSource="{Binding Programs}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel ItemWidth="220" ItemHeight="110" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="loader:Program">
-                    <Border Margin="8"
-                            Padding="12"
-                            CornerRadius="8"
-                            Background="{DynamicResource ThemeControlLowBrush}">
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="{Binding Title}"
-                                       FontSize="16"
-                                       FontWeight="SemiBold"
-                                       TextWrapping="Wrap" />
-                            <TextBlock Text="{Binding Path}"
-                                       FontSize="12"
-                                       Opacity="0.7"
-                                       TextWrapping="Wrap" />
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+    <StackPanel>
+        <TextBox Width="240"
+                 HorizontalAlignment="Center"
+                 Watermark="Search..."
+                 Text="{Binding SearchText, Mode=TwoWay}" />
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding FilteredPrograms}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel ItemWidth="220" ItemHeight="110" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="loader:Program">
+                        <Border Margin="8"
+                                Padding="12"
+                                CornerRadius="8"
+                                Background="{DynamicResource ThemeControlLowBrush}">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{Binding Title}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding Path}"
+                                           FontSize="12"
+                                           Opacity="0.7"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </StackPanel>
 </Window>
