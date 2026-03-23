@@ -6,7 +6,7 @@
         xmlns:main="clr-namespace:DosboxLauncher.Main"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DosboxLauncher.Main.MainWindow"
-        x:DataType="main:MainWindow"
+        x:DataType="main:MainWindowViewModel"
         Title="Dosbox Launcher">
     <ScrollViewer>
         <ItemsControl ItemsSource="{Binding Programs}">

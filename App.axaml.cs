@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -22,7 +21,8 @@ public class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
-            Messenger.Register<MainWindowStateChangeMessage>(this, OnMainWindowStateChangeMessageReceived);
+            AppMessenger.Register<MainWindowActiveChangeMessage>(this,
+                OnMainWindowActiveChangeMessageReceived);
             desktop.Exit += OnDesktopExit;
         }
 
@@ -31,22 +31,19 @@ public class App : Application
 
     private void OnDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-        Messenger.UnregisterAll(this);
+        AppMessenger.UnregisterAll(this);
     }
 
-    private void OnMainWindowStateChangeMessageReceived(object recipient, MainWindowStateChangeMessage message)
+    private void OnMainWindowActiveChangeMessageReceived(object recipient, MainWindowActiveChangeMessage message)
     {
-        switch (message.Value)
+        if (message.Value)
         {
-            case MainWindowState.Opened:
-                _programLoader.Start();
-                break;
-            case MainWindowState.Closed:
-                _programLoader.RequestStop();
-                _programLoader.Join();
-                break;
-            default:
-                throw new InvalidEnumArgumentException();
+            _programLoader.Start();
+        }
+        else
+        {
+            _programLoader.RequestStop();
+            _programLoader.Join();
         }
     }
 }

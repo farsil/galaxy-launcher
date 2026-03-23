@@ -58,7 +58,7 @@ public class ProgramLoader
             if (_shouldStop) break;
 
             Console.WriteLine($"Loading directory {directory}");
-            Messenger.Send(new ProgramLoadedMessage(new Program
+            AppMessenger.Send(new ProgramLoadedMessage(new Program
             {
                 Path = directory,
                 Title = GetTitle(directory)
