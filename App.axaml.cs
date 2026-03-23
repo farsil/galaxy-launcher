@@ -2,16 +2,16 @@ using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using DosboxLauncher.Messaging;
 using DosboxLauncher.Loader;
 using DosboxLauncher.Main;
+using DosboxLauncher.Messaging;
 
 namespace DosboxLauncher.Startup;
 
-public partial class App : Application
+public class App : Application
 {
     private readonly ProgramLoader _programLoader = new(".");
-    
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -23,12 +23,12 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow();
             Messenger.Register<MainWindowStateChangeMessage>(this, OnMainWindowStateChangeMessageReceived);
-            desktop.Exit += OnDesktopExit; 
+            desktop.Exit += OnDesktopExit;
         }
-        
+
         base.OnFrameworkInitializationCompleted();
     }
-    
+
     private void OnDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
         Messenger.UnregisterAll(this);

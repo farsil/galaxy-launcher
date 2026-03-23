@@ -15,7 +15,6 @@
                     <WrapPanel ItemWidth="220" ItemHeight="110" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="loader:Program">
                     <Border Margin="8"

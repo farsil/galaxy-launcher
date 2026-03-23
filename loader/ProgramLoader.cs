@@ -7,9 +7,9 @@ namespace DosboxLauncher.Loader;
 
 public class ProgramLoader
 {
-    private volatile bool _shouldStop;
-    private readonly Thread _thread;
     private readonly string _programsDirectory;
+    private readonly Thread _thread;
+    private volatile bool _shouldStop;
 
     public ProgramLoader(string baseDirectory)
     {
@@ -18,9 +18,15 @@ public class ProgramLoader
         _thread = new Thread(Run);
     }
 
-    public void Start() => _thread.Start();
+    public void Start()
+    {
+        _thread.Start();
+    }
 
-    public void Join() => _thread.Join();
+    public void Join()
+    {
+        _thread.Join();
+    }
 
     public void RequestStop()
     {
@@ -30,7 +36,7 @@ public class ProgramLoader
     private static string? MaybeReadFirstLine(string fileName)
     {
         if (!File.Exists(fileName)) return null;
-        
+
         using var fs = File.OpenRead(fileName);
         using var sr = new StreamReader(fs);
         return sr.ReadLine();
@@ -40,7 +46,7 @@ public class ProgramLoader
     {
         var path = MaybeReadFirstLine(Path.Join(directory, "title"));
         if (path != null) return path;
-        
+
         path = MaybeReadFirstLine(Path.Join(directory, "title.txt"));
         return path ?? Path.GetFileName(directory);
     }
@@ -50,12 +56,12 @@ public class ProgramLoader
         foreach (var directory in Directory.GetDirectories(_programsDirectory))
         {
             if (_shouldStop) break;
-            
+
             Console.WriteLine($"Loading directory {directory}");
             Messenger.Send(new ProgramLoadedMessage(new Program
             {
-                Path = directory, 
-                Title = GetTitle(directory),
+                Path = directory,
+                Title = GetTitle(directory)
             }));
         }
     }

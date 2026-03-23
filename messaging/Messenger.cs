@@ -5,7 +5,7 @@ namespace DosboxLauncher.Messaging;
 public static class Messenger
 {
     private static readonly StrongReferenceMessenger Instance = StrongReferenceMessenger.Default;
-    
+
     public static TMessage Send<TMessage>(TMessage message)
         where TMessage : class
     {
