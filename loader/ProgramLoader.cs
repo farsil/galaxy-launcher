@@ -51,6 +51,14 @@ public class ProgramLoader
         return path ?? Path.GetFileName(directory);
     }
 
+    private static string GetConfigPath(string directory)
+    {
+        var paths = Directory.GetFiles(directory, "*.conf");
+        return paths.Length == 0
+            ? throw new InvalidProgramConfigException("No configuration file found")
+            : paths[0];
+    }
+
     private void Run()
     {
         foreach (var directory in Directory.GetDirectories(_programsDirectory))
@@ -58,11 +66,19 @@ public class ProgramLoader
             if (_shouldStop) break;
 
             Console.WriteLine($"Loading directory {directory}");
-            AppMessenger.Send(new ProgramLoadedMessage(new Program
+            try
             {
-                Path = directory,
-                Title = GetTitle(directory)
-            }));
+                AppMessenger.Send(new ProgramLoadedMessage(new Program
+                {
+                    Path = directory,
+                    Title = GetTitle(directory),
+                    ConfigPath = GetConfigPath(directory)
+                }));
+            }
+            catch (InvalidProgramConfigException ex)
+            {
+                Console.Write($"Unable to load program at directory {directory}: {ex.Message}");
+            }
         }
     }
 }

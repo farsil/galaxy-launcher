@@ -17,7 +17,7 @@
             <ItemsControl ItemsSource="{Binding FilteredPrograms}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel ItemWidth="220" ItemHeight="110" />
+                        <WrapPanel ItemWidth="250" ItemHeight="110" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -32,6 +32,10 @@
                                            FontWeight="SemiBold"
                                            TextWrapping="Wrap" />
                                 <TextBlock Text="{Binding Path}"
+                                           FontSize="12"
+                                           Opacity="0.7"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding ConfigPath}"
                                            FontSize="12"
                                            Opacity="0.7"
                                            TextWrapping="Wrap" />
