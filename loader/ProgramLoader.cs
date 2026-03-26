@@ -59,6 +59,12 @@ public class ProgramLoader
             : paths[0];
     }
 
+    private static string? GetCardPath(string directory)
+    {
+        var paths = Directory.GetFiles(directory, "card.*");
+        return paths.Length == 0 ? null : paths[0];
+    }
+
     private void Run()
     {
         foreach (var directory in Directory.GetDirectories(_programsDirectory))
@@ -72,12 +78,13 @@ public class ProgramLoader
                 {
                     Path = directory,
                     Title = GetTitle(directory),
-                    ConfigPath = GetConfigPath(directory)
+                    ConfigPath = GetConfigPath(directory),
+                    CardPath = GetCardPath(directory)
                 }));
             }
             catch (InvalidProgramConfigException ex)
             {
-                Console.Write($"Unable to load program at directory {directory}: {ex.Message}");
+                Console.WriteLine($"Unable to load program at directory {directory}: {ex.Message}");
             }
         }
     }

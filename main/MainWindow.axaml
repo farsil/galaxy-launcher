@@ -8,6 +8,9 @@
         x:Class="DosboxLauncher.Main.MainWindow"
         x:DataType="main:MainWindowViewModel"
         Title="Dosbox Launcher">
+    <Window.Resources>
+        <main:PathToImageConverter x:Key="PathToImageConverter" />
+    </Window.Resources>
     <StackPanel>
         <TextBox Width="240"
                  HorizontalAlignment="Center"
@@ -17,7 +20,7 @@
             <ItemsControl ItemsSource="{Binding FilteredPrograms}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel ItemWidth="250" ItemHeight="110" />
+                        <WrapPanel ItemWidth="250" ItemHeight="500" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -27,17 +30,10 @@
                                 CornerRadius="8"
                                 Background="{DynamicResource ThemeControlLowBrush}">
                             <StackPanel Spacing="6">
+                                <Image Source="{Binding CardPath, Converter={StaticResource PathToImageConverter}}" />
                                 <TextBlock Text="{Binding Title}"
                                            FontSize="16"
                                            FontWeight="SemiBold"
-                                           TextWrapping="Wrap" />
-                                <TextBlock Text="{Binding Path}"
-                                           FontSize="12"
-                                           Opacity="0.7"
-                                           TextWrapping="Wrap" />
-                                <TextBlock Text="{Binding ConfigPath}"
-                                           FontSize="12"
-                                           Opacity="0.7"
                                            TextWrapping="Wrap" />
                             </StackPanel>
                         </Border>

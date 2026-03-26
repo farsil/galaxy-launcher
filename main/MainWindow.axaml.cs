@@ -14,13 +14,15 @@ public partial class MainWindow : Window
         Closed += OnClosed;
     }
 
+    private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
+
     private void OnOpened(object? sender, EventArgs e)
     {
-        ((MainWindowViewModel)DataContext!).IsActive = true;
+        ViewModel.IsActive = true;
     }
 
     private void OnClosed(object? sender, EventArgs e)
     {
-        ((MainWindowViewModel)DataContext!).IsActive = false;
+        ViewModel.IsActive = false;
     }
 }
