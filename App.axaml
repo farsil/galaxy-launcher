@@ -11,11 +11,4 @@
             </FluentTheme.Palettes>
         </FluentTheme>
     </Application.Styles>
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://dosbox-launcher/resources/CardFallbackImage.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
 </Application>

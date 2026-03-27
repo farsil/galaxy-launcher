@@ -11,7 +11,12 @@
         x:DataType="main:MainWindowViewModel"
         Title="Dosbox Launcher">
     <Window.Resources>
-        <main:PathToImageConverter x:Key="PathToImageConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://dosbox-launcher/main/CardFallbackImage.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <main:PathToImageConverter x:Key="PathToImageConverter" />
+        </ResourceDictionary>
     </Window.Resources>
     <DockPanel Margin="0 16 0 0">
         <TextBox DockPanel.Dock="Top"
