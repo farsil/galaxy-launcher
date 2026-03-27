@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:main="clr-namespace:DosboxLauncher.Main"
+             mc:Ignorable="d"
+             x:Class="DosboxLauncher.Main.ProgramCard"
+             x:Name="Root">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://dosbox-launcher/main/CardFallbackImage.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <main:PathToImageConverter x:Key="PathToImageConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <StackPanel Spacing="16" Width="256">
+        <!-- The default size of GOG cards is 342x482 -->
+        <main:RoundedImage Radius="12"
+                           MaxWidth="228"
+                           MaxHeight="321"
+                           Source="{Binding ImagePath, 
+                             ElementName=Root,
+                             Converter={StaticResource PathToImageConverter},
+                             FallbackValue={StaticResource CardFallbackImage},
+                             TargetNullValue={StaticResource CardFallbackImage}}" />
+        <TextBlock Text="{Binding Title, ElementName=Root}"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center" />
+    </StackPanel>
+</UserControl>
