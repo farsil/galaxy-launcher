@@ -14,7 +14,7 @@
             <main:PathToImageConverter x:Key="PathToImageConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Spacing="16" Width="256">
+    <StackPanel Spacing="24" Width="228">
         <!-- The default size of GOG cards is 342x482 -->
         <main:RoundedImage Radius="12"
                            MaxWidth="228"

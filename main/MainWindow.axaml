@@ -10,16 +10,16 @@
         x:Class="DosboxLauncher.Main.MainWindow"
         x:DataType="main:MainWindowViewModel"
         Title="Dosbox Launcher">
-    <DockPanel Margin="0 16 0 0">
+    <DockPanel Margin="0 32 0 0">
         <TextBox DockPanel.Dock="Top"
                  Width="256"
                  Watermark="Search..."
                  Text="{Binding SearchText, Mode=TwoWay}" />
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0 24 0 0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0 36 0 0">
             <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding FilteredPrograms}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel Margin="0 0 0 48" LineSpacing="64" ItemSpacing="48" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
