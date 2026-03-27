@@ -59,9 +59,9 @@ public class ProgramLoader
             : paths[0];
     }
 
-    private static string? GetCardPath(string directory)
+    private static string? GetImagePath(string directory)
     {
-        var paths = Directory.GetFiles(directory, "card.*");
+        var paths = Directory.GetFiles(directory, "image.*");
         return paths.Length == 0 ? null : paths[0];
     }
 
@@ -79,7 +79,7 @@ public class ProgramLoader
                     Path = directory,
                     Title = GetTitle(directory),
                     ConfigPath = GetConfigPath(directory),
-                    CardPath = GetCardPath(directory)
+                    ImagePath = GetImagePath(directory)
                 }));
             }
             catch (InvalidProgramConfigException ex)

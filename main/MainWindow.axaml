@@ -25,7 +25,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="loader:Program">
                         <main:ProgramCard Title="{Binding Title}"
-                                          ImagePath="{Binding CardPath}" />
+                                          ImagePath="{Binding ImagePath}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
