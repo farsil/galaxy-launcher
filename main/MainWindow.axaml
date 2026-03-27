@@ -30,7 +30,11 @@
                                 CornerRadius="8"
                                 Background="{DynamicResource ThemeControlLowBrush}">
                             <StackPanel Spacing="6">
-                                <Image Source="{Binding CardPath, Converter={StaticResource PathToImageConverter}}" />
+                                <Image
+                                    Source="{Binding CardPath, 
+                                                     Converter={StaticResource PathToImageConverter},
+                                                     FallbackValue={StaticResource CardFallbackImage},
+                                                     TargetNullValue={StaticResource CardFallbackImage}}" />
                                 <TextBlock Text="{Binding Title}"
                                            FontSize="16"
                                            FontWeight="SemiBold"

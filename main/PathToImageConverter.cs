@@ -13,11 +13,12 @@ public sealed class PathToImageConverter : IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
+        if (value == null) return null;
+
         if (value is not string path || !targetType.IsAssignableTo(typeof(IImage)))
             return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
 
-        if (string.IsNullOrWhiteSpace(path))
-            return null;
+        if (path == string.Empty) return null;
 
         try
         {
