@@ -3,7 +3,7 @@
     <DrawingImage x:Key="CardFallbackImage">
         <DrawingImage.Drawing>
             <DrawingGroup>
-                <GeometryDrawing Brush="#000000">
+                <GeometryDrawing Brush="{DynamicResource SystemBaseLowColor}">
                     <GeometryDrawing.Geometry>
                         <RectangleGeometry Rect="0,0,342,482.001" />
                     </GeometryDrawing.Geometry>
