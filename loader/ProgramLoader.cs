@@ -46,10 +46,10 @@ public class ProgramLoader
 
     private static string GetTitle(string directory)
     {
-        var path = MaybeReadFirstLine(Path.Join(directory, "title"));
+        var path = MaybeReadFirstLine(Path.Combine(directory, "title"));
         if (path != null) return path;
 
-        path = MaybeReadFirstLine(Path.Join(directory, "title.txt"));
+        path = MaybeReadFirstLine(Path.Combine(directory, "title.txt"));
         return path ?? Path.GetFileName(directory);
     }
 
@@ -80,7 +80,7 @@ public class ProgramLoader
             }
         }
 
-        return Directory.EnumerateDirectories(Path.Join(path, "programs"));
+        return Directory.EnumerateDirectories(Path.Combine(path, "programs"));
     }
 
     private void Run()
