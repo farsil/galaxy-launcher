@@ -1,19 +1,21 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using DosboxLauncher.Messaging;
+using DosboxLauncher.Interop.Windows;
 
 namespace DosboxLauncher.Loader;
 
 public class ProgramLoader
 {
-    private readonly string _programsDirectory;
+    private readonly string _baseDirectory;
     private readonly Thread _thread;
     private volatile bool _shouldStop;
 
     public ProgramLoader(string baseDirectory)
     {
-        _programsDirectory = Path.Join(baseDirectory, "programs");
+        _baseDirectory = baseDirectory;
         _shouldStop = false;
         _thread = new Thread(Run);
     }
@@ -65,9 +67,25 @@ public class ProgramLoader
         return paths.Length == 0 ? null : paths[0];
     }
 
+    private static IEnumerable<string> EnumerateProgramDirectories(string path)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            var shortcutPath = Path.Combine(path, "programs.lnk");
+            if (File.Exists(shortcutPath))
+            {
+                using var shortcutReader = new ShortcutReader();
+                shortcutReader.Load(shortcutPath);
+                return Directory.EnumerateDirectories(shortcutReader.GetPath());
+            }
+        }
+
+        return Directory.EnumerateDirectories(Path.Join(path, "programs"));
+    }
+
     private void Run()
     {
-        foreach (var directory in Directory.GetDirectories(_programsDirectory))
+        foreach (var directory in EnumerateProgramDirectories(_baseDirectory))
         {
             if (_shouldStop) break;
 
