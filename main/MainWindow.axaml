@@ -16,17 +16,19 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="40">
-    <DockPanel Margin="8 40 8 24">
+    <DockPanel Margin="8 8 8 24" x:Name="MainPanel" >
         <TextBox DockPanel.Dock="Bottom"
                  Height="32"
                  Width="256"
                  Watermark="Search..."
                  Text="{Binding SearchText, Mode=TwoWay}" />
         <StackPanel DockPanel.Dock="Top"
+                    IsVisible="False"
                     Margin="0 -32 0 0"
                     Height="32"
                     Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+                    HorizontalAlignment="Right"
+                    x:Name="SyntheticTitlebar">
             <StackPanel.Styles>
                 <Style Selector="Button:pointerover /template/ ContentPresenter">
                     <Setter Property="Background" Value="Transparent" />

@@ -1,6 +1,8 @@
 using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform;
 
 namespace DosboxLauncher.Main;
 
@@ -13,6 +15,21 @@ public partial class MainWindow : Window
         DataContext = new MainWindowViewModel();
         Opened += OnOpened;
         Closed += OnClosed;
+
+        // Custom window chrome for Windows systems
+        if (OperatingSystem.IsWindows())
+        {
+            ExtendClientAreaToDecorationsHint = true;
+            ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+            ExtendClientAreaTitleBarHeightHint = 40;
+            SyntheticTitlebar.IsVisible = true;
+            MainPanel.Margin = new Thickness(
+                MainPanel.Margin.Left,
+                40,
+                MainPanel.Margin.Right,
+                MainPanel.Margin.Bottom
+            );
+        }
     }
 
     private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
