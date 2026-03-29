@@ -19,6 +19,8 @@ public partial class MainWindow : Window
         // Custom window chrome for Windows systems
         if (OperatingSystem.IsWindows())
         {
+            // We only need it for the custom window chrome
+            PropertyChanged += OnPropertyChanged;
             ExtendClientAreaToDecorationsHint = true;
             ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
             ExtendClientAreaTitleBarHeightHint = 40;
@@ -49,7 +51,7 @@ public partial class MainWindow : Window
         WindowState = WindowState.Minimized;
     }
 
-    private void OnMaximizeButtonClick(object? sender, RoutedEventArgs e)
+    private void OnMaximizeToggleButtonClick(object? sender, RoutedEventArgs e)
     {
         WindowState = WindowState == WindowState.Maximized
             ? WindowState.Normal
@@ -59,5 +61,11 @@ public partial class MainWindow : Window
     private void OnCloseButtonClick(object? sender, RoutedEventArgs e)
     {
         Close();
+    }
+
+    private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == WindowStateProperty)
+            MaximizeToggleButton.Content = WindowState == WindowState.Maximized ? "🗗" : "🗖";
     }
 }

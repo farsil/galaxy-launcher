@@ -12,11 +12,8 @@
         Title="Dosbox Launcher"
         MinWidth="940"
         MinHeight="900"
-        WindowStartupLocation="CenterScreen"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaTitleBarHeightHint="40">
-    <DockPanel Margin="8 8 8 24" x:Name="MainPanel" >
+        WindowStartupLocation="CenterScreen">
+    <DockPanel Margin="8 8 8 24" x:Name="MainPanel">
         <TextBox DockPanel.Dock="Bottom"
                  Height="32"
                  Width="256"
@@ -26,6 +23,7 @@
                     IsVisible="False"
                     Margin="0 -32 0 0"
                     Height="32"
+                    Spacing="4"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     x:Name="SyntheticTitlebar">
@@ -42,23 +40,30 @@
                     <Setter Property="TextBlock.Foreground" Value="{DynamicResource SystemBaseMediumLowColor}" />
                 </Style>
             </StackPanel.Styles>
-            <Button Height="32"
-                    Width="48"
+            <Button Width="40"
                     HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    Padding="0 0 0 4"
                     Click="OnMinimizeButtonClick">
-                _
+                🗕
             </Button>
-            <Button Height="32"
-                    Width="48"
+            <Button Width="40"
                     HorizontalContentAlignment="Center"
-                    Click="OnMaximizeButtonClick">
-                []
+                    VerticalContentAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    Padding="0 0 0 2"
+                    Click="OnMaximizeToggleButtonClick"
+                    x:Name="MaximizeToggleButton">
+                🗖
             </Button>
-            <Button Height="32"
-                    Width="48"
+            <Button Width="40"
                     HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    Padding="0"
                     Click="OnCloseButtonClick">
-                X
+                ✕
             </Button>
         </StackPanel>
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0 16 0 0">
