@@ -6,6 +6,15 @@
              mc:Ignorable="d"
              x:Class="DosboxLauncher.Main.ProgramCard"
              x:Name="Root">
+    <UserControl.Styles>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
+        </Style>
+        <Style Selector="Button:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundPressed}" />
+        </Style>
+    </UserControl.Styles>
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,20 +23,26 @@
             <main:PathToImageConverter x:Key="PathToImageConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Spacing="24" Width="228">
-        <!-- The default size of GOG cards is 342x482 -->
-        <main:RoundedImage Radius="12"
-                           MaxWidth="228"
-                           MaxHeight="321"
-                           Source="{Binding ImagePath, 
+
+    <Button Padding="16"
+            CornerRadius="12"
+            VerticalAlignment="Top"
+            Background="Transparent">
+        <StackPanel Spacing="24" Width="228">
+            <!-- The default size of GOG cards is 342x482 -->
+            <main:RoundedImage Radius="12"
+                               MaxWidth="228"
+                               MaxHeight="321"
+                               Source="{Binding ImagePath, 
                              ElementName=Root,
                              Converter={StaticResource PathToImageConverter},
                              FallbackValue={StaticResource CardFallbackImage},
                              TargetNullValue={StaticResource CardFallbackImage}}" />
-        <TextBlock Text="{Binding Title, ElementName=Root}"
-                   FontSize="16"
-                   FontWeight="SemiBold"
-                   TextWrapping="Wrap"
-                   TextAlignment="Center" />
-    </StackPanel>
+            <TextBlock Text="{Binding Title, ElementName=Root}"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center" />
+        </StackPanel>
+    </Button>
 </UserControl>
