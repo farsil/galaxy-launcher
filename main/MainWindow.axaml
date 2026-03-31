@@ -3,7 +3,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:main="clr-namespace:DosboxLauncher.Main"
-        xmlns:loader="clr-namespace:DosboxLauncher.Loader"
         mc:Ignorable="d"
         d:DesignWidth="1024"
         d:DesignHeight="768"
@@ -12,7 +11,8 @@
         Title="Dosbox Launcher"
         MinWidth="940"
         MinHeight="900"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        x:Name="Root">
     <DockPanel>
         <main:SyntheticTitlebar DockPanel.Dock="Top" />
         <TextBox DockPanel.Dock="Bottom"
@@ -31,9 +31,10 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="loader:Program">
-                        <main:ProgramCard Title="{Binding Title}"
-                                          ImagePath="{Binding ImagePath}" />
+                    <DataTemplate>
+                        <main:ProgramCard Program="{Binding }"
+                                          Command="{Binding ViewModel.StartProgramCommand, 
+                                                                      ElementName=Root}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

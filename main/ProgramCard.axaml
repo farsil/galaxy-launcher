@@ -27,18 +27,20 @@
     <Button Padding="16"
             CornerRadius="12"
             VerticalAlignment="Top"
-            Background="Transparent">
+            Background="Transparent"
+            Command="{Binding Command, ElementName=Root}"
+            CommandParameter="{Binding Program, ElementName=Root}">
         <StackPanel Spacing="24" Width="228">
             <!-- The default size of GOG cards is 342x482 -->
             <main:RoundedImage Radius="12"
                                MaxWidth="228"
                                MaxHeight="321"
-                               Source="{Binding ImagePath, 
-                             ElementName=Root,
-                             Converter={StaticResource PathToImageConverter},
-                             FallbackValue={StaticResource CardFallbackImage},
-                             TargetNullValue={StaticResource CardFallbackImage}}" />
-            <TextBlock Text="{Binding Title, ElementName=Root}"
+                               Source="{Binding Program.ImagePath, 
+                                                ElementName=Root,
+                                                Converter={StaticResource PathToImageConverter},
+                                                FallbackValue={StaticResource CardFallbackImage},
+                                                TargetNullValue={StaticResource CardFallbackImage}}" />
+            <TextBlock Text="{Binding Program.Title, ElementName=Root}"
                        FontSize="16"
                        FontWeight="SemiBold"
                        TextWrapping="Wrap"

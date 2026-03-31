@@ -15,7 +15,7 @@ public class ProgramLoader
 
     public ProgramLoader(string baseDirectory)
     {
-        _baseDirectory = baseDirectory;
+        _baseDirectory = Path.GetFullPath(baseDirectory);
         _shouldStop = false;
         _thread = new Thread(Run);
     }

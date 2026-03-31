@@ -14,7 +14,7 @@ public partial class MainWindow : Window
         Closed += OnClosed;
     }
 
-    private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
+    public MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
 
     private void OnOpened(object? sender, EventArgs e)
     {

@@ -9,7 +9,8 @@ namespace DosboxLauncher.Startup;
 
 public class App : Application
 {
-    private readonly ProgramLoader _programLoader = new(".");
+    private const string BaseDirectory = ".";
+    private readonly ProgramLoader _programLoader = new(BaseDirectory);
 
     public override void Initialize()
     {
@@ -39,6 +40,7 @@ public class App : Application
         if (message.Value)
         {
             _programLoader.Start();
+            AppMessenger.Send(new DosboxFoundMessage(DosboxFinder.Find(BaseDirectory)));
         }
         else
         {

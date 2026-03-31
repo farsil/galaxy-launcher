@@ -1,30 +1,32 @@
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
+using DosboxLauncher.Loader;
 
 namespace DosboxLauncher.Main;
 
 public partial class ProgramCard : UserControl
 {
-    public static readonly StyledProperty<string?> ImagePathProperty =
-        AvaloniaProperty.Register<RoundedImage, string?>(nameof(ImagePath));
+    public static readonly StyledProperty<ICommand?> CommandProperty =
+        AvaloniaProperty.Register<ProgramCard, ICommand?>(nameof(Command));
 
-    public static readonly StyledProperty<string> TitleProperty =
-        AvaloniaProperty.Register<RoundedImage, string>(nameof(Title));
+    public static readonly StyledProperty<Program> ProgramProperty =
+        AvaloniaProperty.Register<ProgramCard, Program>(nameof(Program));
 
     public ProgramCard()
     {
         InitializeComponent();
     }
 
-    public string? ImagePath
+    public ICommand? Command
     {
-        get => GetValue(ImagePathProperty);
-        set => SetValue(ImagePathProperty, value);
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
-    public string Title
+    public Program Program
     {
-        get => GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
+        get => GetValue(ProgramProperty);
+        set => SetValue(ProgramProperty, value);
     }
 }
