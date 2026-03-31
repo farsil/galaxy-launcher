@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using DosboxLauncher.Messaging;
 using DosboxLauncher.Interop.Windows;
+using DosboxLauncher.Messaging;
 
 namespace DosboxLauncher.Loader;
 
@@ -15,7 +15,7 @@ public class ProgramLoader
 
     public ProgramLoader(string baseDirectory)
     {
-        _baseDirectory = Path.GetFullPath(baseDirectory);
+        _baseDirectory = baseDirectory;
         _shouldStop = false;
         _thread = new Thread(Run);
     }

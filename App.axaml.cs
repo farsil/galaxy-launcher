@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -9,8 +10,7 @@ namespace DosboxLauncher.Startup;
 
 public class App : Application
 {
-    private const string BaseDirectory = ".";
-    private readonly ProgramLoader _programLoader = new(BaseDirectory);
+    private readonly ProgramLoader _programLoader = new(AppContext.BaseDirectory);
 
     public override void Initialize()
     {
@@ -40,7 +40,7 @@ public class App : Application
         if (message.Value)
         {
             _programLoader.Start();
-            AppMessenger.Send(new DosboxFoundMessage(DosboxFinder.Find(BaseDirectory)));
+            AppMessenger.Send(new DosboxFoundMessage(DosboxFinder.Find(AppContext.BaseDirectory)));
         }
         else
         {

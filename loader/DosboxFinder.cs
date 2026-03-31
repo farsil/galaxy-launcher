@@ -26,7 +26,7 @@ public static class DosboxFinder
 
     public static string Find(string baseDirectory)
     {
-        var executable = GetDosboxExecutable(Path.GetFullPath(baseDirectory));
+        var executable = GetDosboxExecutable(baseDirectory);
         if (File.Exists(executable)) return executable;
         throw new FileNotFoundException("Dosbox executable not found");
     }
