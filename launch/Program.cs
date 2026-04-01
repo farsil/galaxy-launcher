@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.Messaging.Messages;
 
-namespace DosboxLauncher.Loader;
+namespace DosboxLauncher.Launch;
 
 public sealed record Program
 {

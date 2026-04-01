@@ -5,7 +5,7 @@ using System.Threading;
 using DosboxLauncher.Interop.Windows;
 using DosboxLauncher.Messaging;
 
-namespace DosboxLauncher.Loader;
+namespace DosboxLauncher.Launch;
 
 public class ProgramLoader
 {

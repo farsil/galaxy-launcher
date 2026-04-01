@@ -25,5 +25,6 @@
       <DependentUpon>MainWindow.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Remove="loader\DosboxFinder.cs" />
   </ItemGroup>
 </Project>

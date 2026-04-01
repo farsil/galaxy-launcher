@@ -1,7 +1,7 @@
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
-using DosboxLauncher.Loader;
+using DosboxLauncher.Launch;
 
 namespace DosboxLauncher.Main;
 
