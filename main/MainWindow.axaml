@@ -22,7 +22,9 @@
                  Watermark="Search..."
                  Text="{Binding SearchText, Mode=TwoWay}" />
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding FilteredPrograms}">
+            <ItemsControl HorizontalAlignment="Center"
+                          IsEnabled="{Binding !IsDosboxActive}"
+                          ItemsSource="{Binding FilteredPrograms}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Margin="24"

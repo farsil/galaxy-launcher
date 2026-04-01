@@ -40,7 +40,7 @@ public class App : Application
 
     private void OnDosboxStartRequestMessageReceived(object recipient, DosboxStartRequestMessage message)
     {
-        _dosboxRunner.Start(message.Value);
+        _dosboxRunner.Start(message.Program);
     }
 
     private void OnMainWindowActiveChangeMessageReceived(object recipient, MainWindowActiveChangeMessage message)

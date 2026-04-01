@@ -11,9 +11,12 @@ using DosboxLauncher.Messaging;
 namespace DosboxLauncher.Main;
 
 public sealed partial class MainWindowViewModel()
-    : ObservableRecipient(AppMessenger.Instance), IRecipient<ProgramLoadedMessage>
+    : ObservableRecipient(AppMessenger.Instance), IRecipient<ProgramLoadedMessage>,
+        IRecipient<DosboxActiveChangeMessage>
 {
     private readonly ObservableCollection<Program> _programs = [];
+
+    [ObservableProperty] public partial bool IsDosboxActive { get; private set; }
 
     public IEnumerable<Program> FilteredPrograms =>
         string.IsNullOrWhiteSpace(SearchText)
@@ -30,6 +33,11 @@ public sealed partial class MainWindowViewModel()
             OnPropertyChanged(nameof(FilteredPrograms));
         }
     } = string.Empty;
+
+    public void Receive(DosboxActiveChangeMessage message)
+    {
+        IsDosboxActive = message.IsDosboxActive;
+    }
 
     public void Receive(ProgramLoadedMessage message)
     {
