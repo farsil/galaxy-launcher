@@ -41,7 +41,7 @@ public sealed partial class MainWindowViewModel()
 
     public void Receive(ProgramLoadedMessage message)
     {
-        _programs.Add(message.Value);
+        _programs.Add(message.Program);
         OnPropertyChanged(nameof(FilteredPrograms));
     }
 

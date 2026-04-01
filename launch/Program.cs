@@ -1,5 +1,3 @@
-using CommunityToolkit.Mvvm.Messaging.Messages;
-
 namespace DosboxLauncher.Launch;
 
 public sealed record Program
@@ -9,5 +7,3 @@ public sealed record Program
     public required string ConfigPath { get; init; }
     public string? ImagePath { get; init; }
 }
-
-public class ProgramLoadedMessage(Program program) : ValueChangedMessage<Program>(program);

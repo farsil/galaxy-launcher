@@ -45,7 +45,7 @@ public class App : Application
 
     private void OnMainWindowActiveChangeMessageReceived(object recipient, MainWindowActiveChangeMessage message)
     {
-        if (message.Value)
+        if (message.IsActive)
         {
             _programLoader.Start();
         }
