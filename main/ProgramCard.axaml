@@ -35,6 +35,7 @@
             <main:RoundedImage Radius="12"
                                MaxWidth="228"
                                MaxHeight="321"
+                               IsEnabled="{Binding IsEnabled, ElementName=Root}"
                                Source="{Binding Program.ImagePath, 
                                                 ElementName=Root,
                                                 Converter={StaticResource PathToImageConverter},

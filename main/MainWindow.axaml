@@ -23,7 +23,6 @@
                  Text="{Binding SearchText, Mode=TwoWay}" />
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl HorizontalAlignment="Center"
-                          IsEnabled="{Binding !IsDosboxActive}"
                           ItemsSource="{Binding FilteredPrograms}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -34,7 +33,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <main:ProgramCard Program="{Binding }"
+                        <main:ProgramCard IsEnabled="{Binding !ViewModel.IsDosboxActive, ElementName=Root}"
+                                          Program="{Binding }"
                                           Command="{Binding ViewModel.StartProgramCommand, 
                                                                       ElementName=Root}" />
                     </DataTemplate>
