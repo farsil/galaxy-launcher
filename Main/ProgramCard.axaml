@@ -21,7 +21,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://dosbox-launcher/main/CardFallbackImage.axaml" />
+                <ResourceInclude Source="avares://DosboxLauncher/Main/CardFallbackImage.axaml" />
             </ResourceDictionary.MergedDictionaries>
             <main:PathToImageConverter x:Key="PathToImageConverter" />
         </ResourceDictionary>
