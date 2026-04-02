@@ -2,17 +2,18 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using DosboxLauncher.Interop.Windows;
-using DosboxLauncher.Messaging;
 
 namespace DosboxLauncher.Launch;
 
 public sealed class DosboxRunner
 {
+    private readonly IDosboxState _dosboxState;
     private readonly string _executablePath;
     private Process? _process;
 
-    public DosboxRunner(string baseDirectory)
+    public DosboxRunner(string baseDirectory, IDosboxState dosboxState)
     {
+        _dosboxState = dosboxState;
         _executablePath = GetDosboxExecutablePath(baseDirectory);
         if (!File.Exists(_executablePath)) throw new FileNotFoundException("Dosbox executable not found");
     }
@@ -26,7 +27,7 @@ public sealed class DosboxRunner
             _process = Process.Start(_executablePath, ["--conf", program.ConfigPath, "--working-dir", program.Path]);
             _process.Exited += OnProcessExited;
             _process.EnableRaisingEvents = true;
-            AppMessenger.Send(new DosboxActiveChangeMessage(true));
+            _dosboxState.IsActive = true;
         }
     }
 
@@ -41,9 +42,9 @@ public sealed class DosboxRunner
         _process?.WaitForExit();
     }
 
-    private static void OnProcessExited(object? sender, EventArgs e)
+    private void OnProcessExited(object? sender, EventArgs e)
     {
-        AppMessenger.Send(new DosboxActiveChangeMessage(false));
+        _dosboxState.IsActive = false;
     }
 
     private static string GetDosboxExecutablePath(string baseDirectory)

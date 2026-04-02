@@ -2,19 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Interop.Windows;
-using DosboxLauncher.Messaging;
 
 namespace DosboxLauncher.Launch;
 
 public class ProgramLoader
 {
     private readonly string _baseDirectory;
+    private readonly IMessenger _messenger;
     private readonly Thread _thread;
     private volatile bool _shouldStop;
 
-    public ProgramLoader(string baseDirectory)
+    public ProgramLoader(string baseDirectory, IMessenger messenger)
     {
+        _messenger = messenger;
         _baseDirectory = baseDirectory;
         _shouldStop = false;
         _thread = new Thread(Run);
@@ -92,7 +94,7 @@ public class ProgramLoader
             Console.WriteLine($"Loading directory {directory}");
             try
             {
-                AppMessenger.Send(new ProgramLoadedMessage(new Program
+                _messenger.Send(new ProgramLoadedMessage(new Program
                 {
                     Path = directory,
                     Title = GetTitle(directory),

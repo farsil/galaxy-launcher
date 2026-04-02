@@ -6,17 +6,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Launch;
-using DosboxLauncher.Messaging;
 
 namespace DosboxLauncher.Main;
 
-public sealed partial class MainWindowViewModel()
-    : ObservableRecipient(AppMessenger.Instance), IRecipient<ProgramLoadedMessage>,
-        IRecipient<DosboxActiveChangeMessage>
+public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxState dosboxState)
+    : ObservableRecipient(messenger), IRecipient<ProgramLoadedMessage>
 {
     private readonly ObservableCollection<Program> _programs = [];
 
-    [ObservableProperty] public partial bool IsDosboxActive { get; private set; }
+    public IDosboxState DosboxState => dosboxState;
 
     public IEnumerable<Program> FilteredPrograms =>
         string.IsNullOrWhiteSpace(SearchText)
@@ -33,11 +31,6 @@ public sealed partial class MainWindowViewModel()
             OnPropertyChanged(nameof(FilteredPrograms));
         }
     } = string.Empty;
-
-    public void Receive(DosboxActiveChangeMessage message)
-    {
-        IsDosboxActive = message.IsDosboxActive;
-    }
 
     public void Receive(ProgramLoadedMessage message)
     {

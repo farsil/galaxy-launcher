@@ -7,11 +7,6 @@ public sealed class DosboxStartRequestMessage(Program program)
 
 public sealed class DosboxStopRequestMessage;
 
-public sealed class DosboxActiveChangeMessage(bool isDosboxActive)
-{
-    public bool IsDosboxActive { get; } = isDosboxActive;
-}
-
 public sealed class ProgramLoadedMessage(Program program)
 {
     public Program Program { get; } = program;

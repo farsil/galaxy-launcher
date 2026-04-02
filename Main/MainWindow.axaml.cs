@@ -9,12 +9,11 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        DataContext = new MainWindowViewModel();
         Opened += OnOpened;
         Closed += OnClosed;
     }
 
-    public MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
+    public MainWindowViewModel ViewModel => DataContext as MainWindowViewModel ?? throw new InvalidCastException();
 
     private void OnOpened(object? sender, EventArgs e)
     {
