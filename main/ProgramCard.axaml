@@ -13,6 +13,9 @@
         <Style Selector="Button:pressed /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundPressed}" />
         </Style>
+        <Style Selector="Button:disabled /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
     </UserControl.Styles>
 
     <UserControl.Resources>
