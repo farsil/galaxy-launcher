@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DosboxLauncher.Main.StopButton"
+             x:Name="Root">
+    <Button Background="Transparent"
+            IsEnabled="{Binding IsEnabled, ElementName=Root}"
+            Command="{Binding Command, ElementName=Root}">
+        <Button.Styles>
+            <Style Selector="Rectangle">
+                <Setter Property="Stroke" Value="{DynamicResource Dangerous}" />
+                <Setter Property="Fill" Value="{DynamicResource Dangerous}" />
+            </Style>
+            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="Rectangle:pointerover">
+                <Setter Property="Stroke" Value="{DynamicResource DangerousPointerOver}" />
+                <Setter Property="Fill" Value="{DynamicResource DangerousPointerOver}" />
+            </Style>
+            <Style Selector="Button:pressed /template/ ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="Button:pressed Rectangle">
+                <Setter Property="Stroke" Value="{DynamicResource DangerousPressed}" />
+                <Setter Property="Fill" Value="{DynamicResource DangerousPressed}" />
+            </Style>
+            <Style Selector="Button:disabled /template/ ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="Button:disabled Rectangle">
+                <Setter Property="Stroke" Value="{DynamicResource AccentButtonForegroundDisabled}" />
+                <Setter Property="Fill" Value="{DynamicResource AccentButtonForegroundDisabled}" />
+            </Style>
+        </Button.Styles>
+        <Rectangle
+            Width="20"
+            Height="20"
+            RadiusX="2"
+            RadiusY="2"
+            StrokeThickness="2"
+            Opacity="0.3" />
+    </Button>
+</UserControl>

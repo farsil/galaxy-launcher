@@ -36,6 +36,11 @@ public sealed class DosboxRunner
             _process?.Kill();
     }
 
+    public void WaitForExit()
+    {
+        _process?.WaitForExit();
+    }
+
     private static void OnProcessExited(object? sender, EventArgs e)
     {
         AppMessenger.Send(new DosboxActiveChangeMessage(false));

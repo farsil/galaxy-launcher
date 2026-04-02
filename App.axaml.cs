@@ -26,6 +26,7 @@ public class App : Application
             AppMessenger.Register<MainWindowActiveChangeMessage>(this,
                 OnMainWindowActiveChangeMessageReceived);
             AppMessenger.Register<DosboxStartRequestMessage>(this, OnDosboxStartRequestMessageReceived);
+            AppMessenger.Register<DosboxStopRequestMessage>(this, OnDosboxStopRequestMessageReceived);
             desktop.Exit += OnDesktopExit;
         }
 
@@ -41,6 +42,12 @@ public class App : Application
     private void OnDosboxStartRequestMessageReceived(object recipient, DosboxStartRequestMessage message)
     {
         _dosboxRunner.Start(message.Program);
+    }
+
+    private void OnDosboxStopRequestMessageReceived(object recipient, DosboxStopRequestMessage message)
+    {
+        _dosboxRunner.Kill();
+        _dosboxRunner.WaitForExit();
     }
 
     private void OnMainWindowActiveChangeMessageReceived(object recipient, MainWindowActiveChangeMessage message)

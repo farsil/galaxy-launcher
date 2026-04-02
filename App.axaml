@@ -11,4 +11,20 @@
             </FluentTheme.Palettes>
         </FluentTheme>
     </Application.Styles>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="Dangerous" Color="#DD0000" />
+                    <SolidColorBrush x:Key="DangerousPressed" Color="#BB0000" />
+                    <SolidColorBrush x:Key="DangerousPointerOver" Color="#EE2222" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="Dangerous" Color="Red" />
+                    <SolidColorBrush x:Key="DangerousPressed" Color="#DD0000" />
+                    <SolidColorBrush x:Key="DangerousPointerOver" Color="#FF5555" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

@@ -46,9 +46,15 @@ public sealed partial class MainWindowViewModel()
     }
 
     [RelayCommand]
-    private void StartProgram(Program program)
+    private void StartDosbox(Program program)
     {
         Messenger.Send(new DosboxStartRequestMessage(program));
+    }
+
+    [RelayCommand]
+    private void StopDosbox()
+    {
+        Messenger.Send(new DosboxStopRequestMessage());
     }
 
     protected override void OnActivated()

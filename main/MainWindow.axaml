@@ -15,12 +15,20 @@
         x:Name="Root">
     <DockPanel>
         <main:SyntheticTitlebar DockPanel.Dock="Top" />
-        <TextBox DockPanel.Dock="Bottom"
-                 Margin="24"
-                 Height="32"
-                 Width="256"
-                 Watermark="Search..."
-                 Text="{Binding SearchText, Mode=TwoWay}" />
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="16"
+                    Margin="24"
+                    Height="32">
+            <TextBox Width="256"
+                     Watermark="Search..."
+                     Text="{Binding SearchText, Mode=TwoWay}" />
+            <main:StopButton
+                IsEnabled="{Binding IsDosboxActive}"
+                Command="{Binding StopDosboxCommand}" />
+        </StackPanel>
+
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl HorizontalAlignment="Center"
                           ItemsSource="{Binding FilteredPrograms}">
@@ -35,7 +43,7 @@
                     <DataTemplate>
                         <main:ProgramCard IsEnabled="{Binding !ViewModel.IsDosboxActive, ElementName=Root}"
                                           Program="{Binding }"
-                                          Command="{Binding ViewModel.StartProgramCommand, 
+                                          Command="{Binding ViewModel.StartDosboxCommand, 
                                                                       ElementName=Root}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
