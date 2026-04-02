@@ -60,12 +60,12 @@ public sealed partial class MainWindowViewModel()
     protected override void OnActivated()
     {
         base.OnActivated();
-        Messenger.Send(new MainWindowActiveChangeMessage(true));
+        Messenger.Send(new ProgramLoaderStartRequestMessage());
     }
 
     protected override void OnDeactivated()
     {
         base.OnDeactivated();
-        Messenger.Send(new MainWindowActiveChangeMessage(false));
+        Messenger.Send(new ProgramLoaderStopRequestMessage());
     }
 }

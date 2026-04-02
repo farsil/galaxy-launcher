@@ -23,8 +23,8 @@ public class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
-            AppMessenger.Register<MainWindowActiveChangeMessage>(this,
-                OnMainWindowActiveChangeMessageReceived);
+            AppMessenger.Register<ProgramLoaderStartRequestMessage>(this, OnProgramLoaderStartRequestMessageReceived);
+            AppMessenger.Register<ProgramLoaderStopRequestMessage>(this, OnProgramLoaderStopRequestMessageReceived);
             AppMessenger.Register<DosboxStartRequestMessage>(this, OnDosboxStartRequestMessageReceived);
             AppMessenger.Register<DosboxStopRequestMessage>(this, OnDosboxStopRequestMessageReceived);
             desktop.Exit += OnDesktopExit;
@@ -50,16 +50,14 @@ public class App : Application
         _dosboxRunner.WaitForExit();
     }
 
-    private void OnMainWindowActiveChangeMessageReceived(object recipient, MainWindowActiveChangeMessage message)
+    private void OnProgramLoaderStartRequestMessageReceived(object recipient, ProgramLoaderStartRequestMessage message)
     {
-        if (message.IsActive)
-        {
-            _programLoader.Start();
-        }
-        else
-        {
-            _programLoader.RequestStop();
-            _programLoader.Join();
-        }
+        _programLoader.Start();
+    }
+
+    private void OnProgramLoaderStopRequestMessageReceived(object recipient, ProgramLoaderStopRequestMessage message)
+    {
+        _programLoader.RequestStop();
+        _programLoader.Join();
     }
 }
