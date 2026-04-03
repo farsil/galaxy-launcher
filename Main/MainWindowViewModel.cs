@@ -16,21 +16,21 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
 
     public IDosboxState DosboxState => dosboxState;
 
-    public IEnumerable<ProgramCardViewModel> FilteredProgramCards =>
-        string.IsNullOrWhiteSpace(SearchText)
-            ? _cardViewModels
-            : _cardViewModels.Where(c => c.Program.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+    public IEnumerable<ProgramCardViewModel> ProgramCards => _cardViewModels
+        .Where(c => string.IsNullOrWhiteSpace(SearchText) ||
+                    c.Program.Title.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
+        .OrderBy(c => c.Program.Title);
 
-    public string SearchText
+    public string? SearchText
     {
         get;
         set
         {
             if (field == value) return;
             field = value;
-            OnPropertyChanged(nameof(FilteredProgramCards));
+            OnPropertyChanged(nameof(ProgramCards));
         }
-    } = string.Empty;
+    }
 
     public void Receive(ProgramLoadedMessage message)
     {
@@ -39,7 +39,7 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
             Command = StartDosboxCommand
         });
 
-        OnPropertyChanged(nameof(FilteredProgramCards));
+        OnPropertyChanged(nameof(ProgramCards));
     }
 
     [RelayCommand]

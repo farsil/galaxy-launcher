@@ -29,8 +29,7 @@
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl HorizontalAlignment="Center"
-                          ItemsSource="{Binding FilteredProgramCards}">
+            <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding ProgramCards}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Margin="24"
@@ -40,7 +39,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <main:ProgramCard DataContext="{Binding}" />
+                        <main:ProgramCard DataContext="{Binding .}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
