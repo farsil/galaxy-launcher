@@ -12,14 +12,14 @@ namespace DosboxLauncher.Main;
 public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxState dosboxState)
     : ObservableRecipient(messenger), IRecipient<ProgramLoadedMessage>
 {
-    private readonly ObservableCollection<Program> _programs = [];
+    private readonly ObservableCollection<ProgramCardViewModel> _cardViewModels = [];
 
     public IDosboxState DosboxState => dosboxState;
 
-    public IEnumerable<Program> FilteredPrograms =>
+    public IEnumerable<ProgramCardViewModel> FilteredProgramCards =>
         string.IsNullOrWhiteSpace(SearchText)
-            ? _programs
-            : _programs.Where(p => p.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+            ? _cardViewModels
+            : _cardViewModels.Where(c => c.Program.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
 
     public string SearchText
     {
@@ -28,14 +28,18 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
         {
             if (field == value) return;
             field = value;
-            OnPropertyChanged(nameof(FilteredPrograms));
+            OnPropertyChanged(nameof(FilteredProgramCards));
         }
     } = string.Empty;
 
     public void Receive(ProgramLoadedMessage message)
     {
-        _programs.Add(message.Program);
-        OnPropertyChanged(nameof(FilteredPrograms));
+        _cardViewModels.Add(new ProgramCardViewModel(message.Program, dosboxState)
+        {
+            Command = StartDosboxCommand
+        });
+
+        OnPropertyChanged(nameof(FilteredProgramCards));
     }
 
     [RelayCommand]

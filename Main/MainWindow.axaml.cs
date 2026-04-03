@@ -1,5 +1,6 @@
 using System;
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace DosboxLauncher.Main;
 
@@ -13,15 +14,13 @@ public partial class MainWindow : Window
         Closed += OnClosed;
     }
 
-    public MainWindowViewModel ViewModel => DataContext as MainWindowViewModel ?? throw new InvalidCastException();
-
     private void OnOpened(object? sender, EventArgs e)
     {
-        ViewModel.IsActive = true;
+        if (DataContext is ObservableRecipient o) o.IsActive = true;
     }
 
     private void OnClosed(object? sender, EventArgs e)
     {
-        ViewModel.IsActive = false;
+        if (DataContext is ObservableRecipient o) o.IsActive = false;
     }
 }

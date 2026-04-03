@@ -11,8 +11,7 @@
         Title="Dosbox Launcher"
         MinWidth="940"
         MinHeight="900"
-        WindowStartupLocation="CenterScreen"
-        x:Name="Root">
+        WindowStartupLocation="CenterScreen">
     <DockPanel>
         <main:SyntheticTitlebar DockPanel.Dock="Top" />
         <StackPanel DockPanel.Dock="Bottom"
@@ -31,7 +30,7 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl HorizontalAlignment="Center"
-                          ItemsSource="{Binding FilteredPrograms}">
+                          ItemsSource="{Binding FilteredProgramCards}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Margin="24"
@@ -41,10 +40,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <main:ProgramCard IsEnabled="{Binding !ViewModel.DosboxState.IsActive, ElementName=Root}"
-                                          Program="{Binding }"
-                                          Command="{Binding ViewModel.StartDosboxCommand, 
-                                                                      ElementName=Root}" />
+                        <main:ProgramCard DataContext="{Binding}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

@@ -1,11 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:main="clr-namespace:DosboxLauncher.Main"
-             mc:Ignorable="d"
              x:Class="DosboxLauncher.Main.ProgramCard"
-             x:Name="Root">
+             x:DataType="main:ProgramCardViewModel"
+             IsEnabled="{Binding !DosboxState.IsActive}">
     <UserControl.Styles>
         <Style Selector="Button:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
@@ -31,20 +29,19 @@
             CornerRadius="12"
             VerticalAlignment="Top"
             Background="Transparent"
-            Command="{Binding Command, ElementName=Root}"
-            CommandParameter="{Binding Program, ElementName=Root}">
+            Command="{Binding Command}"
+            CommandParameter="{Binding Program}">
         <StackPanel Spacing="24" Width="228">
             <!-- The default size of GOG cards is 342x482 -->
             <main:RoundedImage Radius="12"
                                MaxWidth="228"
                                MaxHeight="321"
-                               IsEnabled="{Binding IsEnabled, ElementName=Root}"
+                               IsEnabled="{Binding !DosboxState.IsActive}"
                                Source="{Binding Program.ImagePath, 
-                                                ElementName=Root,
                                                 Converter={StaticResource PathToImageConverter},
                                                 FallbackValue={StaticResource CardFallbackImage},
                                                 TargetNullValue={StaticResource CardFallbackImage}}" />
-            <TextBlock Text="{Binding Program.Title, ElementName=Root}"
+            <TextBlock Text="{Binding Program.Title}"
                        FontSize="16"
                        FontWeight="SemiBold"
                        TextWrapping="Wrap"
