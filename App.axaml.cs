@@ -11,14 +11,14 @@ namespace DosboxLauncher.Startup;
 
 public class App : Application
 {
+    private readonly Func<Window> _createWindow;
     private readonly DosboxRunner _dosboxRunner;
     private readonly StrongReferenceMessenger _messenger;
     private readonly ProgramLoader _programLoader;
-    private readonly Func<Window> _createWindow;
 
     public App()
     {
-        var dosboxState = new DosboxState(false);
+        var dosboxState = new DosboxState();
 
         _messenger = StrongReferenceMessenger.Default;
         _programLoader = new ProgramLoader(AppContext.BaseDirectory, _messenger);

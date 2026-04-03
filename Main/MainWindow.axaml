@@ -26,6 +26,13 @@
             <main:StopButton
                 IsEnabled="{Binding DosboxState.IsActive}"
                 Command="{Binding StopDosboxCommand}" />
+            <TextBlock HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       IsVisible="{Binding !DosboxState.IsRunnable}"
+                       Foreground="{DynamicResource Dangerous}"
+                       FontWeight="SemiBold">
+                Unable to find DOSBox executable!
+            </TextBlock>
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">

@@ -11,7 +11,7 @@ public sealed class RoundedImage : Image
 
     public RoundedImage()
     {
-        SizeChanged += OnImageSizeChanged;
+        SizeChanged += OnSizeChanged;
         PropertyChanged += OnPropertyChanged;
     }
 
@@ -24,20 +24,24 @@ public sealed class RoundedImage : Image
     private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         // 🙾 Applies a checkered opacity mask when disabled 🙾
-        // Note that the OpacityMask cannot tile, so we have to generate a pattern large enough for the image
-        if (e.Property == IsEnabledProperty)
-            OpacityMask = IsEnabled
-                ? null
-                : new ImageBrush(CheckeredBitmap.Get(Bounds.Size)) { Stretch = Stretch.None };
+        if (e.Property == IsEnabledProperty && Source is not null)
+            OpacityMask = e.NewValue is true ? null : CreateOpacityMask(Source.Size);
     }
 
-    private void OnImageSizeChanged(object? sender, SizeChangedEventArgs e)
+    private void OnSizeChanged(object? sender, SizeChangedEventArgs e)
     {
+        OpacityMask = IsEnabled ? null : CreateOpacityMask(e.NewSize);
         Clip = new RectangleGeometry
         {
             Rect = new Rect(e.NewSize),
             RadiusX = Radius,
             RadiusY = Radius
         };
+    }
+
+    private static ImageBrush CreateOpacityMask(Size size)
+    {
+        // Note that the OpacityMask cannot tile, so we have to generate a pattern large enough for the image
+        return new ImageBrush(CheckeredBitmap.Get(size)) { Stretch = Stretch.None };
     }
 }

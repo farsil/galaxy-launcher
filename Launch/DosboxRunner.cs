@@ -15,14 +15,14 @@ public sealed class DosboxRunner
     {
         _dosboxState = dosboxState;
         _executablePath = GetDosboxExecutablePath(baseDirectory);
-        if (!File.Exists(_executablePath)) throw new FileNotFoundException("Dosbox executable not found");
+        _dosboxState.IsRunnable = File.Exists(_executablePath);
     }
 
     private static string ExecutableName => OperatingSystem.IsWindows() ? "dosbox.exe" : "dosbox";
 
     public void Start(Program program)
     {
-        if (_process == null || _process.HasExited)
+        if (_dosboxState.IsRunnable && (_process == null || _process.HasExited))
         {
             _process = Process.Start(_executablePath, ["--conf", program.ConfigPath, "--working-dir", program.Path]);
             _process.Exited += OnProcessExited;
