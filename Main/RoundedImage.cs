@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using DosboxLauncher.ViewService;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,11 +32,11 @@ public sealed class RoundedImage : Image
 
     private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs? e)
     {
-        var serviceProvider = this.FindViewServiceProvider();
-        _maskGenerator = serviceProvider.GetRequiredService<IOpacityMaskGenerator>();
-        _viewState = serviceProvider.GetRequiredService<IViewState>();
+        var serviceProvider = this.FindAncestorOfType<IServiceProvider>();
+        _maskGenerator = serviceProvider?.GetRequiredService<IOpacityMaskGenerator>();
+        _viewState = serviceProvider?.GetRequiredService<IViewState>();
 
-        _viewState.PropertyChanged += OnViewStatePropertyChanged;
+        _viewState?.PropertyChanged += OnViewStatePropertyChanged;
     }
 
     private void OnViewStatePropertyChanged(object? sender, PropertyChangedEventArgs e)
