@@ -8,7 +8,7 @@ using DosboxLauncher.Main;
 
 namespace DosboxLauncher.Startup;
 
-public class App : Application
+public sealed class App : Application
 {
     private readonly DosboxRunner _dosboxRunner;
     private readonly DosboxState _dosboxState;
