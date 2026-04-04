@@ -1,10 +1,11 @@
 using System;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DosboxLauncher.ViewService;
 
 namespace DosboxLauncher.Main;
 
-public partial class MainWindow : ServiceProvidingWindow
+public partial class MainWindow : Window, IServiceProvidingWindow
 {
     public MainWindow()
     {
@@ -13,6 +14,8 @@ public partial class MainWindow : ServiceProvidingWindow
         Opened += OnOpened;
         Closed += OnClosed;
     }
+
+    public IServiceProvider? ServiceProvider { get; set; }
 
     private void OnOpened(object? sender, EventArgs e)
     {

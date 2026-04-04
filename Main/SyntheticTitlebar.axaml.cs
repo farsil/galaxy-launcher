@@ -35,7 +35,7 @@ public sealed partial class SyntheticTitlebar : UserControl
 
     private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        var serviceProvider = this.FindAncestorOfType<IServiceProvider>();
+        var serviceProvider = this.FindAncestorOfType<IServiceProvidingWindow>()?.ServiceProvider;
         if (serviceProvider != null)
         {
             WindowState = serviceProvider.GetRequiredService<IWindowState>();

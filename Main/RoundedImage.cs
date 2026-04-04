@@ -39,7 +39,7 @@ public sealed class RoundedImage : Image
 
     private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs? e)
     {
-        var serviceProvider = this.FindAncestorOfType<IServiceProvider>();
+        var serviceProvider = this.FindAncestorOfType<IServiceProvidingWindow>()?.ServiceProvider;
         if (serviceProvider != null)
         {
             MaskGenerator = serviceProvider.GetRequiredService<IOpacityMaskGenerator>();
