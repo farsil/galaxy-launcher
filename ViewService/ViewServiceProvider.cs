@@ -1,26 +1,14 @@
 ﻿using System;
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Microsoft.Extensions.DependencyInjection;
+using Avalonia.VisualTree;
 
 namespace DosboxLauncher.ViewService;
 
 public static class ViewServiceProvider
 {
-    private static IServiceProvider Instance
+    public static IServiceProvider FindViewServiceProvider(this Visual? visual)
     {
-        get
-        {
-            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                if (desktop.MainWindow is IServiceProvider provider)
-                    return provider;
-
-            throw new InvalidOperationException("No service provider available");
-        }
-    }
-
-    public static T GetRequiredService<T>() where T : notnull
-    {
-        return Instance.GetRequiredService<T>();
+        return visual.FindAncestorOfType<IServiceProvider>() ??
+               throw new InvalidOperationException("No service provider available");
     }
 }

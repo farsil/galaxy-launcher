@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using DosboxLauncher.ViewService;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DosboxLauncher.Main;
 
@@ -11,17 +12,14 @@ public sealed class RoundedImage : Image
     public static readonly StyledProperty<double> RadiusProperty =
         AvaloniaProperty.Register<RoundedImage, double>(nameof(Radius));
 
-    private readonly IOpacityMaskGenerator _maskGenerator =
-        ViewServiceProvider.GetRequiredService<IOpacityMaskGenerator>();
-
-    private readonly IViewState _viewState =
-        ViewServiceProvider.GetRequiredService<IViewState>();
+    private IOpacityMaskGenerator? _maskGenerator;
+    private IViewState? _viewState;
 
     public RoundedImage()
     {
         SizeChanged += OnSizeChanged;
         PropertyChanged += OnPropertyChanged;
-        _viewState.PropertyChanged += OnViewPropertyChanged;
+        AttachedToVisualTree += OnAttachedToVisualTree;
     }
 
     public double Radius
@@ -30,22 +28,31 @@ public sealed class RoundedImage : Image
         set => SetValue(RadiusProperty, value);
     }
 
-    private void OnViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs? e)
+    {
+        var serviceProvider = this.FindViewServiceProvider();
+        _maskGenerator = serviceProvider.GetRequiredService<IOpacityMaskGenerator>();
+        _viewState = serviceProvider.GetRequiredService<IViewState>();
+
+        _viewState.PropertyChanged += OnViewStatePropertyChanged;
+    }
+
+    private void OnViewStatePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IViewState.Scaling))
-            OpacityMask = IsEnabled ? null : _maskGenerator.Generate(DesiredSize);
+            OpacityMask = IsEnabled ? null : _maskGenerator?.Generate(DesiredSize);
     }
 
     private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         // 🙾 Applies a checkered opacity mask when disabled 🙾
         if (e.Property == IsEnabledProperty && Source is not null)
-            OpacityMask = e.NewValue is true ? null : _maskGenerator.Generate(DesiredSize);
+            OpacityMask = e.NewValue is true ? null : _maskGenerator?.Generate(DesiredSize);
     }
 
     private void OnSizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        OpacityMask = IsEnabled ? null : _maskGenerator.Generate(e.NewSize);
+        OpacityMask = IsEnabled ? null : _maskGenerator?.Generate(e.NewSize);
         Clip = new RectangleGeometry
         {
             Rect = new Rect(e.NewSize),
