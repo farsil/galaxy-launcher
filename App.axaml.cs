@@ -5,8 +5,6 @@ using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Launch;
 using DosboxLauncher.Main;
-using DosboxLauncher.ViewService;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DosboxLauncher.Startup;
 
@@ -27,14 +25,10 @@ public class App : Application
 
     private MainWindow CreateWindow()
     {
-        var window = new MainWindow();
-        window.DataContext = new MainWindowViewModel(_messenger, _dosboxState);
-        window.ServiceProvider = new ServiceCollection()
-            .AddSingleton<IWindowState>(new WindowState(window))
-            .AddSingleton<IOpacityMaskGenerator, OpacityMaskGenerator>()
-            .BuildServiceProvider();
-
-        return window;
+        return new MainWindow
+        {
+            DataContext = new MainWindowViewModel(_messenger, _dosboxState)
+        };
     }
 
     public override void Initialize()

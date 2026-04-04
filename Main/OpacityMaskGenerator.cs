@@ -1,14 +1,14 @@
 using System;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
 namespace DosboxLauncher.ViewService;
 
-public class OpacityMaskGenerator : IOpacityMaskGenerator
+public sealed class OpacityMaskGenerator
 {
     private const double CheckerSize = 2.0;
     private const uint BlackPixel = 0x00000000;
@@ -18,13 +18,19 @@ public class OpacityMaskGenerator : IOpacityMaskGenerator
     // https://docs.avaloniaui.net/docs/graphics-animation/drawing-graphics
     private static readonly Vector DefaultDpi = new(96, 96);
 
-    private readonly IWindowState _windowState;
+    private readonly Window _window;
     private WriteableBitmap? _bitmap;
 
-    public OpacityMaskGenerator(IWindowState windowState)
+    public OpacityMaskGenerator(Window window)
     {
-        _windowState = windowState;
-        _windowState.PropertyChanged += OnWindowPropertyChanged;
+        _window = window;
+        _window.ScalingChanged += OnWindowScalingChanged;
+    }
+
+    private void OnWindowScalingChanged(object? sender, EventArgs e)
+    {
+        _bitmap?.Dispose();
+        _bitmap = null;
     }
 
     /**
@@ -34,13 +40,13 @@ public class OpacityMaskGenerator : IOpacityMaskGenerator
      *     the provided size. If the dimensions of the requested size exceed the current
      *     cached bitmap, a new bitmap is generated with updated dimensions.
      * </remarks>
-     * <param name="size">The size of the opacity mask to retrieve.</param>
-     * <returns>An instance representing the checkered opacity mask.</returns>
+     * <param name="size">The size of the opacity mask.</param>
+     * <returns>The checkered opacity mask.</returns>
      */
     public IBrush Generate(Size size)
     {
-        var pixelSize = PixelSize.FromSize(size, _windowState.Scaling);
-        var checkerPixelSize = (int)Math.Ceiling(CheckerSize * _windowState.Scaling);
+        var pixelSize = PixelSize.FromSize(size, _window.DesktopScaling);
+        var checkerPixelSize = (int)Math.Ceiling(CheckerSize * _window.DesktopScaling);
 
         if (_bitmap is null)
         {
@@ -52,6 +58,8 @@ public class OpacityMaskGenerator : IOpacityMaskGenerator
                 Math.Max(pixelSize.Width, _bitmap.PixelSize.Width),
                 Math.Max(pixelSize.Height, _bitmap.PixelSize.Height)
             );
+
+            _bitmap.Dispose();
             _bitmap = GenerateBitmap(expandedPixelSize, checkerPixelSize);
         }
 
@@ -61,15 +69,6 @@ public class OpacityMaskGenerator : IOpacityMaskGenerator
             // Setting SourceRect since the checkered bitmap may be larger
             SourceRect = new RelativeRect(size, RelativeUnit.Absolute)
         };
-    }
-
-    private void OnWindowPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(IWindowState.Scaling))
-        {
-            _bitmap?.Dispose();
-            _bitmap = null;
-        }
     }
 
     private static WriteableBitmap GenerateBitmap(PixelSize size, int checkerSize)

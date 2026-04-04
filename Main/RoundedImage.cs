@@ -1,11 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using DosboxLauncher.ViewService;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DosboxLauncher.Main;
 
@@ -14,21 +12,15 @@ public sealed class RoundedImage : Image
     public static readonly StyledProperty<double> RadiusProperty =
         AvaloniaProperty.Register<RoundedImage, double>(nameof(Radius));
 
+    // We need only one instance for all the rounded images. Thread-safe since we only
+    // manipulate the shadow mask in the UI thread.
+    private static OpacityMaskGenerator? _maskGenerator;
+
     public RoundedImage()
     {
         SizeChanged += OnSizeChanged;
         PropertyChanged += OnPropertyChanged;
         AttachedToVisualTree += OnAttachedToVisualTree;
-    }
-
-    private IOpacityMaskGenerator MaskGenerator
-    {
-        get
-        {
-            ArgumentNullException.ThrowIfNull(field);
-            return field;
-        }
-        set;
     }
 
     public double Radius
@@ -39,32 +31,29 @@ public sealed class RoundedImage : Image
 
     private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs? e)
     {
-        var serviceProvider = this.FindAncestorOfType<IServiceProvidingWindow>()?.ServiceProvider;
-        if (serviceProvider != null)
+        var window = this.FindAncestorOfType<Window>();
+        if (window != null)
         {
-            MaskGenerator = serviceProvider.GetRequiredService<IOpacityMaskGenerator>();
-
-            var windowState = serviceProvider.GetRequiredService<IWindowState>();
-            windowState.PropertyChanged += OnWindowStatePropertyChanged;
+            _maskGenerator ??= new OpacityMaskGenerator(window);
+            window.ScalingChanged += OnWindowScalingChanged;
         }
     }
 
-    private void OnWindowStatePropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnWindowScalingChanged(object? sender, EventArgs e)
     {
-        if (e.PropertyName == nameof(IWindowState.Scaling))
-            OpacityMask = IsEnabled ? null : MaskGenerator.Generate(DesiredSize);
+        OpacityMask = IsEnabled ? null : _maskGenerator?.Generate(DesiredSize);
     }
 
     private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         // 🙾 Applies a checkered opacity mask when disabled 🙾
         if (e.Property == IsEnabledProperty && Source is not null)
-            OpacityMask = e.NewValue is true ? null : MaskGenerator.Generate(DesiredSize);
+            OpacityMask = e.NewValue is true ? null : _maskGenerator?.Generate(DesiredSize);
     }
 
     private void OnSizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        OpacityMask = IsEnabled ? null : MaskGenerator.Generate(e.NewSize);
+        OpacityMask = IsEnabled ? null : _maskGenerator?.Generate(e.NewSize);
         Clip = new RectangleGeometry
         {
             Rect = new Rect(e.NewSize),

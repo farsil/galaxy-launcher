@@ -1,17 +1,18 @@
 using System;
-using System.ComponentModel;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform;
 using Avalonia.VisualTree;
-using DosboxLauncher.ViewService;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DosboxLauncher.Main;
 
 public sealed partial class SyntheticTitlebar : UserControl
 {
     private const double TitleBarHeight = 40;
+
+    private Window? _window;
 
     public SyntheticTitlebar()
     {
@@ -23,47 +24,37 @@ public sealed partial class SyntheticTitlebar : UserControl
         }
     }
 
-    private IWindowState WindowState
-    {
-        get
-        {
-            ArgumentNullException.ThrowIfNull(field);
-            return field;
-        }
-        set;
-    }
-
     private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        var serviceProvider = this.FindAncestorOfType<IServiceProvidingWindow>()?.ServiceProvider;
-        if (serviceProvider != null)
-        {
-            WindowState = serviceProvider.GetRequiredService<IWindowState>();
+        _window = this.FindAncestorOfType<Window>();
+        Debug.Assert(_window != null);
 
-            WindowState.ExtendClientAreaHint = true;
-            WindowState.TitleBarHeightHint = TitleBarHeight;
-            WindowState.PropertyChanged += OnWindowStateChanged;
-        }
+        _window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+        _window.ExtendClientAreaToDecorationsHint = true;
+        _window.ExtendClientAreaTitleBarHeightHint = TitleBarHeight;
+        _window.PropertyChanged += OnWindowPropertyChanged;
     }
 
     private void OnMinimizeButtonClick(object? sender, RoutedEventArgs e)
     {
-        WindowState.Minimize();
+        _window?.WindowState = WindowState.Minimized;
     }
 
     private void OnMaximizeToggleButtonClick(object? sender, RoutedEventArgs e)
     {
-        WindowState.ToggleMaximize();
+        _window?.WindowState = _window.WindowState == WindowState.Maximized
+            ? WindowState.Normal
+            : WindowState.Maximized;
     }
 
     private void OnCloseButtonClick(object? sender, RoutedEventArgs e)
     {
-        WindowState.Close();
+        _window?.Close();
     }
 
-    private void OnWindowStateChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IWindowState.IsMaximized))
-            MaximizeToggleButton.Content = WindowState.IsMaximized ? "🗗" : "🗖";
+        if (e.Property == Window.WindowStateProperty)
+            MaximizeToggleButton.Content = _window?.WindowState == WindowState.Maximized ? "🗗" : "🗖";
     }
 }
