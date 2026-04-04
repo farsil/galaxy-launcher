@@ -7,37 +7,27 @@
             Command="{Binding Command, ElementName=Root}">
         <Button.Styles>
             <Style Selector="Rectangle">
-                <Setter Property="Stroke" Value="{DynamicResource Dangerous}" />
                 <Setter Property="Fill" Value="{DynamicResource Dangerous}" />
             </Style>
             <Style Selector="Button:pointerover /template/ ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
             <Style Selector="Rectangle:pointerover">
-                <Setter Property="Stroke" Value="{DynamicResource DangerousPointerOver}" />
                 <Setter Property="Fill" Value="{DynamicResource DangerousPointerOver}" />
             </Style>
             <Style Selector="Button:pressed /template/ ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
             <Style Selector="Button:pressed Rectangle">
-                <Setter Property="Stroke" Value="{DynamicResource DangerousPressed}" />
                 <Setter Property="Fill" Value="{DynamicResource DangerousPressed}" />
             </Style>
             <Style Selector="Button:disabled /template/ ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
             <Style Selector="Button:disabled Rectangle">
-                <Setter Property="Stroke" Value="{DynamicResource AccentButtonForegroundDisabled}" />
                 <Setter Property="Fill" Value="{DynamicResource AccentButtonForegroundDisabled}" />
             </Style>
         </Button.Styles>
-        <Rectangle
-            Width="20"
-            Height="20"
-            RadiusX="2"
-            RadiusY="2"
-            StrokeThickness="2"
-            Opacity="0.3" />
+        <Rectangle Width="16" Height="16" RadiusX="2" RadiusY="2" />
     </Button>
 </UserControl>

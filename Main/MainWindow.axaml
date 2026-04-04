@@ -14,7 +14,7 @@
         <StackPanel DockPanel.Dock="Bottom"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
-                    Spacing="16"
+                    Spacing="12"
                     Margin="24"
                     Height="32">
             <TextBox Width="256"
