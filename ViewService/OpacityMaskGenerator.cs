@@ -18,13 +18,13 @@ public class OpacityMaskGenerator : IOpacityMaskGenerator
     // https://docs.avaloniaui.net/docs/graphics-animation/drawing-graphics
     private static readonly Vector DefaultDpi = new(96, 96);
 
-    private readonly IViewState _viewState;
+    private readonly IWindowState _windowState;
     private WriteableBitmap? _bitmap;
 
-    public OpacityMaskGenerator(IViewState viewState)
+    public OpacityMaskGenerator(IWindowState windowState)
     {
-        _viewState = viewState;
-        _viewState.PropertyChanged += OnViewPropertyChanged;
+        _windowState = windowState;
+        _windowState.PropertyChanged += OnWindowPropertyChanged;
     }
 
     /**
@@ -39,8 +39,8 @@ public class OpacityMaskGenerator : IOpacityMaskGenerator
      */
     public IBrush Generate(Size size)
     {
-        var pixelSize = PixelSize.FromSize(size, _viewState.Scaling);
-        var checkerPixelSize = (int)Math.Ceiling(CheckerSize * _viewState.Scaling);
+        var pixelSize = PixelSize.FromSize(size, _windowState.Scaling);
+        var checkerPixelSize = (int)Math.Ceiling(CheckerSize * _windowState.Scaling);
 
         if (_bitmap is null)
         {
@@ -63,9 +63,9 @@ public class OpacityMaskGenerator : IOpacityMaskGenerator
         };
     }
 
-    private void OnViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnWindowPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IViewState.Scaling))
+        if (e.PropertyName == nameof(IWindowState.Scaling))
         {
             _bitmap?.Dispose();
             _bitmap = null;

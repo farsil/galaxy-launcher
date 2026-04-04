@@ -13,7 +13,7 @@ public sealed partial class SyntheticTitlebar : UserControl
 {
     private const double TitleBarHeight = 40;
 
-    private IViewState? _viewState;
+    private IWindowState? _windowState;
 
     public SyntheticTitlebar()
     {
@@ -28,31 +28,31 @@ public sealed partial class SyntheticTitlebar : UserControl
     private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         var serviceProvider = this.FindAncestorOfType<IServiceProvider>();
-        _viewState = serviceProvider?.GetRequiredService<IViewState>();
+        _windowState = serviceProvider?.GetRequiredService<IWindowState>();
 
-        _viewState?.ExtendClientAreaHint = true;
-        _viewState?.TitleBarHeightHint = TitleBarHeight;
-        _viewState?.PropertyChanged += OnWindowStateChanged;
+        _windowState?.ExtendClientAreaHint = true;
+        _windowState?.TitleBarHeightHint = TitleBarHeight;
+        _windowState?.PropertyChanged += OnWindowStateChanged;
     }
 
     private void OnMinimizeButtonClick(object? sender, RoutedEventArgs e)
     {
-        _viewState?.Minimize();
+        _windowState?.Minimize();
     }
 
     private void OnMaximizeToggleButtonClick(object? sender, RoutedEventArgs e)
     {
-        _viewState?.ToggleMaximize();
+        _windowState?.ToggleMaximize();
     }
 
     private void OnCloseButtonClick(object? sender, RoutedEventArgs e)
     {
-        _viewState?.Close();
+        _windowState?.Close();
     }
 
     private void OnWindowStateChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IViewState.State))
-            MaximizeToggleButton.Content = _viewState?.State == WindowState.Maximized ? "🗗" : "🗖";
+        if (e.PropertyName == nameof(IWindowState.IsMaximized))
+            MaximizeToggleButton.Content = _windowState?.IsMaximized == true ? "🗗" : "🗖";
     }
 }

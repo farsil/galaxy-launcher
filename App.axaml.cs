@@ -30,7 +30,7 @@ public class App : Application
         var window = new MainWindow();
         window.DataContext = new MainWindowViewModel(_messenger, _dosboxState);
         window.ServiceProvider = new ServiceCollection()
-            .AddSingleton<IViewState>(new ViewState(window))
+            .AddSingleton<IWindowState>(new WindowState(window))
             .AddSingleton<IOpacityMaskGenerator, OpacityMaskGenerator>()
             .BuildServiceProvider();
 

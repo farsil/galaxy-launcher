@@ -15,7 +15,6 @@ public sealed class RoundedImage : Image
         AvaloniaProperty.Register<RoundedImage, double>(nameof(Radius));
 
     private IOpacityMaskGenerator? _maskGenerator;
-    private IViewState? _viewState;
 
     public RoundedImage()
     {
@@ -34,14 +33,14 @@ public sealed class RoundedImage : Image
     {
         var serviceProvider = this.FindAncestorOfType<IServiceProvider>();
         _maskGenerator = serviceProvider?.GetRequiredService<IOpacityMaskGenerator>();
-        _viewState = serviceProvider?.GetRequiredService<IViewState>();
 
-        _viewState?.PropertyChanged += OnViewStatePropertyChanged;
+        var windowState = serviceProvider?.GetRequiredService<IWindowState>();
+        windowState?.PropertyChanged += OnWindowStatePropertyChanged;
     }
 
-    private void OnViewStatePropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnWindowStatePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IViewState.Scaling))
+        if (e.PropertyName == nameof(IWindowState.Scaling))
             OpacityMask = IsEnabled ? null : _maskGenerator?.Generate(DesiredSize);
     }
 

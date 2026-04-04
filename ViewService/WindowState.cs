@@ -3,14 +3,15 @@ using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using AvaloniaWindowState = Avalonia.Controls.WindowState;
 
 namespace DosboxLauncher.ViewService;
 
-public class ViewState : IViewState
+public class WindowState : IWindowState
 {
     private readonly Window _window;
 
-    public ViewState(Window window)
+    public WindowState(Window window)
     {
         _window = window;
         _window.ScalingChanged += OnScalingChanged;
@@ -20,7 +21,8 @@ public class ViewState : IViewState
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public double Scaling => _window.DesktopScaling;
-    public WindowState State => _window.WindowState;
+
+    public bool IsMaximized => _window.WindowState == AvaloniaWindowState.Maximized;
 
     public bool ExtendClientAreaHint
     {
@@ -39,7 +41,9 @@ public class ViewState : IViewState
 
     public void ToggleMaximize()
     {
-        _window.WindowState = _window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        _window.WindowState = _window.WindowState == AvaloniaWindowState.Maximized
+            ? AvaloniaWindowState.Normal
+            : AvaloniaWindowState.Maximized;
     }
 
     public void Close()
@@ -49,7 +53,7 @@ public class ViewState : IViewState
 
     public void Minimize()
     {
-        _window.WindowState = WindowState.Minimized;
+        _window.WindowState = AvaloniaWindowState.Minimized;
     }
 
     private void OnScalingChanged(object? sender, EventArgs e)
@@ -60,6 +64,6 @@ public class ViewState : IViewState
     private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property == Window.WindowStateProperty)
-            PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(nameof(State)));
+            PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(nameof(IsMaximized)));
     }
 }
