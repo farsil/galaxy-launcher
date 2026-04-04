@@ -1,32 +1,40 @@
 using System;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Launch;
 using DosboxLauncher.Main;
+using DosboxLauncher.ViewService;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DosboxLauncher.Startup;
 
 public class App : Application
 {
-    private readonly Func<Window> _createWindow;
     private readonly DosboxRunner _dosboxRunner;
+    private readonly DosboxState _dosboxState;
     private readonly StrongReferenceMessenger _messenger;
     private readonly ProgramLoader _programLoader;
 
     public App()
     {
-        var dosboxState = new DosboxState();
-
+        _dosboxState = new DosboxState();
         _messenger = StrongReferenceMessenger.Default;
         _programLoader = new ProgramLoader(AppContext.BaseDirectory, _messenger);
-        _dosboxRunner = new DosboxRunner(AppContext.BaseDirectory, dosboxState);
-        _createWindow = () => new MainWindow
-        {
-            DataContext = new MainWindowViewModel(_messenger, dosboxState)
-        };
+        _dosboxRunner = new DosboxRunner(AppContext.BaseDirectory, _dosboxState);
+    }
+
+    private MainWindow CreateWindow()
+    {
+        var window = new MainWindow();
+        window.DataContext = new MainWindowViewModel(_messenger, _dosboxState);
+        window.ServiceProvider = new ServiceCollection()
+            .AddSingleton<IViewState>(new ViewState(window))
+            .AddSingleton<IOpacityMaskGenerator, OpacityMaskGenerator>()
+            .BuildServiceProvider();
+
+        return window;
     }
 
     public override void Initialize()
@@ -38,7 +46,7 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = _createWindow();
+            desktop.MainWindow = CreateWindow();
             desktop.Exit += OnDesktopExit;
         }
 

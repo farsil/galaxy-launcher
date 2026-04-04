@@ -1,10 +1,10 @@
 using System;
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DosboxLauncher.ViewService;
 
 namespace DosboxLauncher.Main;
 
-public partial class MainWindow : Window
+public partial class MainWindow : ServiceProvidingWindow
 {
     public MainWindow()
     {
