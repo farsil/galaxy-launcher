@@ -13,8 +13,6 @@ public sealed partial class SyntheticTitlebar : UserControl
 {
     private const double TitleBarHeight = 40;
 
-    private IWindowState? _windowState;
-
     public SyntheticTitlebar()
     {
         InitializeComponent();
@@ -25,34 +23,47 @@ public sealed partial class SyntheticTitlebar : UserControl
         }
     }
 
+    private IWindowState WindowState
+    {
+        get
+        {
+            ArgumentNullException.ThrowIfNull(field);
+            return field;
+        }
+        set;
+    }
+
     private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         var serviceProvider = this.FindAncestorOfType<IServiceProvider>();
-        _windowState = serviceProvider?.GetRequiredService<IWindowState>();
+        if (serviceProvider != null)
+        {
+            WindowState = serviceProvider.GetRequiredService<IWindowState>();
 
-        _windowState?.ExtendClientAreaHint = true;
-        _windowState?.TitleBarHeightHint = TitleBarHeight;
-        _windowState?.PropertyChanged += OnWindowStateChanged;
+            WindowState.ExtendClientAreaHint = true;
+            WindowState.TitleBarHeightHint = TitleBarHeight;
+            WindowState.PropertyChanged += OnWindowStateChanged;
+        }
     }
 
     private void OnMinimizeButtonClick(object? sender, RoutedEventArgs e)
     {
-        _windowState?.Minimize();
+        WindowState.Minimize();
     }
 
     private void OnMaximizeToggleButtonClick(object? sender, RoutedEventArgs e)
     {
-        _windowState?.ToggleMaximize();
+        WindowState.ToggleMaximize();
     }
 
     private void OnCloseButtonClick(object? sender, RoutedEventArgs e)
     {
-        _windowState?.Close();
+        WindowState.Close();
     }
 
     private void OnWindowStateChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IWindowState.IsMaximized))
-            MaximizeToggleButton.Content = _windowState?.IsMaximized == true ? "🗗" : "🗖";
+            MaximizeToggleButton.Content = WindowState.IsMaximized ? "🗗" : "🗖";
     }
 }
