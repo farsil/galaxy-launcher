@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -13,8 +14,10 @@ public sealed class RoundedImage : Image
         AvaloniaProperty.Register<RoundedImage, double>(nameof(Radius));
 
     // We need only one instance for all the rounded images. Thread-safe since we only
-    // manipulate the shadow mask in the UI thread.
-    private static OpacityMaskGenerator? _maskGenerator;
+    // manipulate the opacity mask in the UI thread.
+    private static readonly CheckeredBrushGenerator OpacityMaskGenerator = new();
+
+    private Window? _window;
 
     public RoundedImage()
     {
@@ -31,34 +34,42 @@ public sealed class RoundedImage : Image
 
     private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs? e)
     {
-        var window = this.FindAncestorOfType<Window>();
-        if (window != null)
-        {
-            _maskGenerator ??= new OpacityMaskGenerator(window);
-            window.ScalingChanged += OnWindowScalingChanged;
-        }
+        _window = this.FindAncestorOfType<Window>();
+        Debug.Assert(_window != null);
+
+        _window.ScalingChanged += OnWindowScalingChanged;
     }
 
     private void OnWindowScalingChanged(object? sender, EventArgs e)
     {
-        OpacityMask = IsEnabled ? null : _maskGenerator?.Generate(DesiredSize);
+        UpdateOpacityMask(DesiredSize);
     }
 
     private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
-        // 🙾 Applies a checkered opacity mask when disabled 🙾
-        if (e.Property == IsEnabledProperty && Source is not null)
-            OpacityMask = e.NewValue is true ? null : _maskGenerator?.Generate(DesiredSize);
+        if (e.Property == IsEnabledProperty)
+            UpdateOpacityMask(DesiredSize);
     }
 
     private void OnSizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        OpacityMask = IsEnabled ? null : _maskGenerator?.Generate(e.NewSize);
+        UpdateClip(e.NewSize);
+        UpdateOpacityMask(e.NewSize);
+    }
+
+    private void UpdateClip(Size size)
+    {
         Clip = new RectangleGeometry
         {
-            Rect = new Rect(e.NewSize),
+            Rect = new Rect(size),
             RadiusX = Radius,
             RadiusY = Radius
         };
+    }
+
+    private void UpdateOpacityMask(Size size)
+    {
+        // 🙾 Applies a checkered opacity mask when disabled 🙾
+        OpacityMask = IsEnabled ? null : OpacityMaskGenerator.Generate(size, _window?.DesktopScaling ?? 1.0);
     }
 }
