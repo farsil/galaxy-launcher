@@ -16,6 +16,8 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
 
     public IDosboxState DosboxState => dosboxState;
 
+    public bool HasProgramCards => ProgramCards.Any();
+
     public IEnumerable<ProgramCardViewModel> ProgramCards => _cardViewModels
         .Where(c => string.IsNullOrWhiteSpace(SearchText) ||
                     c.Program.Title.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
@@ -29,6 +31,7 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
             if (field == value) return;
             field = value;
             OnPropertyChanged(nameof(ProgramCards));
+            OnPropertyChanged(nameof(HasProgramCards));
         }
     }
 
@@ -40,6 +43,9 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
         });
 
         OnPropertyChanged(nameof(ProgramCards));
+        // Only signal that the property is changed if it's the first program loaded
+        if (_cardViewModels.Count == 1)
+            OnPropertyChanged(nameof(HasProgramCards));
     }
 
     [RelayCommand]

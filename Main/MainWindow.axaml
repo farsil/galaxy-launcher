@@ -9,6 +9,14 @@
         Height="768"
         MinHeight="400"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://DosboxLauncher/Main/QuestionMarkImage.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <DockPanel>
         <main:SyntheticTitlebar DockPanel.Dock="Top" />
         <StackPanel DockPanel.Dock="Bottom"
@@ -32,21 +40,36 @@
             </TextBlock>
         </StackPanel>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding ProgramCards}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Margin="24 16"
-                                   LineSpacing="32"
-                                   ItemSpacing="32" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <main:ProgramCard DataContext="{Binding .}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <Panel>
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Spacing="24"
+                        IsVisible="{Binding !HasProgramCards}">
+                <Image Height="120" Width="120" Source="{DynamicResource QuestionMarkImage}" />
+                <TextBlock
+                    FontSize="18"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource SystemBaseMediumColor}"
+                    TextAlignment="Center">
+                    No programs found
+                </TextBlock>
+            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" IsVisible="{Binding HasProgramCards}">
+                <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding ProgramCards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Margin="24 16"
+                                       LineSpacing="32"
+                                       ItemSpacing="32" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <main:ProgramCard DataContext="{Binding .}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Panel>
     </DockPanel>
 </Window>

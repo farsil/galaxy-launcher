@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using CommunityToolkit.Mvvm.Messaging;
@@ -69,7 +68,7 @@ public class ProgramLoader
         return paths.Length == 0 ? null : paths[0];
     }
 
-    private static IEnumerable<string> EnumerateProgramDirectories(string path)
+    private static string GetProgramsPath(string path)
     {
         if (OperatingSystem.IsWindows())
         {
@@ -78,16 +77,19 @@ public class ProgramLoader
             {
                 using var shortcutReader = new ShortcutReader();
                 shortcutReader.Load(shortcutPath);
-                return Directory.EnumerateDirectories(shortcutReader.GetPath());
+                return shortcutReader.GetPath();
             }
         }
 
-        return Directory.EnumerateDirectories(Path.Combine(path, "programs"));
+        return Path.Combine(path, "programs");
     }
 
     private void Run()
     {
-        foreach (var directory in EnumerateProgramDirectories(_baseDirectory))
+        var programsPath = GetProgramsPath(_baseDirectory);
+        if (!Directory.Exists(programsPath)) return;
+
+        foreach (var directory in Directory.EnumerateDirectories(programsPath))
         {
             if (_shouldStop) break;
 
