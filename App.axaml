@@ -13,18 +13,9 @@
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="DangerousColor" Color="#DD0000" />
-                    <SolidColorBrush x:Key="DangerousPressedColor" Color="#BB0000" />
-                    <SolidColorBrush x:Key="DangerousPointerOverColor" Color="#EE2222" />
-                </ResourceDictionary>
-                <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="DangerousColor" Color="#FF0000" />
-                    <SolidColorBrush x:Key="DangerousPressedColor" Color="#DD0000" />
-                    <SolidColorBrush x:Key="DangerousPointerOverColor" Color="#FF5555" />
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
+            <SolidColorBrush x:Key="DangerousColor" Color="#DD0000" />
+            <SolidColorBrush x:Key="DangerousPressedColor" Color="#BB0000" />
+            <SolidColorBrush x:Key="DangerousPointerOverColor" Color="#FF4444" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
