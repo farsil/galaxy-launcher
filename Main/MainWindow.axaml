@@ -44,7 +44,7 @@
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Spacing="24"
-                        IsVisible="{Binding !HasProgramCards}">
+                        IsVisible="{Binding !HasSearchResults}">
                 <Image Height="120" Width="120" Source="{DynamicResource QuestionMarkImage}" />
                 <TextBlock
                     FontSize="18"
@@ -54,8 +54,8 @@
                     No programs found
                 </TextBlock>
             </StackPanel>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" IsVisible="{Binding HasProgramCards}">
-                <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding ProgramCards}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" IsVisible="{Binding HasSearchResults}">
+                <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding SearchResults}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Margin="24 16"

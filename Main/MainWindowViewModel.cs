@@ -12,16 +12,16 @@ namespace DosboxLauncher.Main;
 public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxState dosboxState)
     : ObservableRecipient(messenger), IRecipient<ProgramLoadedMessage>
 {
-    private readonly ObservableCollection<ProgramCardViewModel> _cardViewModels = [];
+    private readonly ObservableCollection<ProgramCardViewModel> _programCardViewModels = [];
 
     public IDosboxState DosboxState => dosboxState;
 
-    public bool HasProgramCards => ProgramCards.Any();
+    public bool HasSearchResults => SearchResults.Any();
 
-    public IEnumerable<ProgramCardViewModel> ProgramCards => _cardViewModels
-        .Where(c => string.IsNullOrWhiteSpace(SearchText) ||
-                    c.Program.Title.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
-        .OrderBy(c => c.Program.Title);
+    public IEnumerable<ProgramCardViewModel> SearchResults => _programCardViewModels
+        .Where(vm => string.IsNullOrWhiteSpace(SearchText) ||
+                     vm.Program.Title.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
+        .OrderBy(vm => vm.Program.Title);
 
     public string? SearchText
     {
@@ -30,22 +30,22 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
         {
             if (field == value) return;
             field = value;
-            OnPropertyChanged(nameof(ProgramCards));
-            OnPropertyChanged(nameof(HasProgramCards));
+            OnPropertyChanged(nameof(SearchResults));
+            OnPropertyChanged(nameof(HasSearchResults));
         }
     }
 
     public void Receive(ProgramLoadedMessage message)
     {
-        _cardViewModels.Add(new ProgramCardViewModel(message.Program, dosboxState)
+        _programCardViewModels.Add(new ProgramCardViewModel(message.Program, dosboxState)
         {
             Command = StartDosboxCommand
         });
 
-        OnPropertyChanged(nameof(ProgramCards));
+        OnPropertyChanged(nameof(SearchResults));
         // Only signal that the property is changed if it's the first program loaded
-        if (_cardViewModels.Count == 1)
-            OnPropertyChanged(nameof(HasProgramCards));
+        if (_programCardViewModels.Count == 1)
+            OnPropertyChanged(nameof(HasSearchResults));
     }
 
     [RelayCommand]
