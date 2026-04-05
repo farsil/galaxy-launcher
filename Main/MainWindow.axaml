@@ -34,7 +34,7 @@
             <TextBlock HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        IsVisible="{Binding !DosboxState.IsRunnable}"
-                       Foreground="{DynamicResource Dangerous}"
+                       Foreground="{DynamicResource DangerousColor}"
                        FontWeight="SemiBold">
                 Unable to find DOSBox executable!
             </TextBlock>

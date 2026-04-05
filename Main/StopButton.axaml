@@ -7,19 +7,19 @@
             Command="{Binding Command, ElementName=Root}">
         <Button.Styles>
             <Style Selector="Rectangle">
-                <Setter Property="Fill" Value="{DynamicResource Dangerous}" />
+                <Setter Property="Fill" Value="{DynamicResource DangerousColor}" />
             </Style>
             <Style Selector="Button:pointerover /template/ ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
             <Style Selector="Rectangle:pointerover">
-                <Setter Property="Fill" Value="{DynamicResource DangerousPointerOver}" />
+                <Setter Property="Fill" Value="{DynamicResource DangerousPointerOverColor}" />
             </Style>
             <Style Selector="Button:pressed /template/ ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
             <Style Selector="Button:pressed Rectangle">
-                <Setter Property="Fill" Value="{DynamicResource DangerousPressed}" />
+                <Setter Property="Fill" Value="{DynamicResource DangerousPressedColor}" />
             </Style>
             <Style Selector="Button:disabled /template/ ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
