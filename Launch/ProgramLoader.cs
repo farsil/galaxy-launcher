@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Interop.Windows;
 
@@ -9,13 +10,15 @@ namespace DosboxLauncher.Launch;
 public class ProgramLoader
 {
     private readonly string _baseDirectory;
+    private readonly IDispatcher _dispatcher;
     private readonly IMessenger _messenger;
     private readonly Thread _thread;
     private volatile bool _shouldStop;
 
-    public ProgramLoader(string baseDirectory, IMessenger messenger)
+    public ProgramLoader(string baseDirectory, IMessenger messenger, IDispatcher dispatcher)
     {
         _messenger = messenger;
+        _dispatcher = dispatcher;
         _baseDirectory = baseDirectory;
         _shouldStop = false;
         _thread = new Thread(Run);
@@ -96,13 +99,15 @@ public class ProgramLoader
             Console.WriteLine($"Loading directory {directory}");
             try
             {
-                _messenger.Send(new ProgramLoadedMessage(new Program
+                var program = new Program
                 {
                     Path = directory,
                     Title = GetTitle(directory),
                     ConfigPath = GetConfigPath(directory),
                     ImagePath = GetImagePath(directory)
-                }));
+                };
+
+                _dispatcher.Post(() => _messenger.Send(new ProgramLoadedMessage(program)));
             }
             catch (InvalidProgramConfigException ex)
             {

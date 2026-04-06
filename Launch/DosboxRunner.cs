@@ -1,19 +1,22 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Avalonia.Threading;
 using DosboxLauncher.Interop.Windows;
 
 namespace DosboxLauncher.Launch;
 
 public sealed class DosboxRunner
 {
+    private readonly IDispatcher _dispatcher;
     private readonly IDosboxState _dosboxState;
     private readonly string _executablePath;
     private Process? _process;
 
-    public DosboxRunner(string baseDirectory, IDosboxState dosboxState)
+    public DosboxRunner(string baseDirectory, IDosboxState dosboxState, IDispatcher dispatcher)
     {
         _dosboxState = dosboxState;
+        _dispatcher = dispatcher;
         _executablePath = GetDosboxExecutablePath(baseDirectory);
         _dosboxState.IsRunnable = File.Exists(_executablePath);
     }
@@ -44,7 +47,7 @@ public sealed class DosboxRunner
 
     private void OnProcessExited(object? sender, EventArgs e)
     {
-        _dosboxState.IsActive = false;
+        _dispatcher.Post(() => _dosboxState.IsActive = false);
     }
 
     private static string GetDosboxExecutablePath(string baseDirectory)

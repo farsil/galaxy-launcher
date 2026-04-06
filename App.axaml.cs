@@ -2,6 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using DosboxLauncher.Launch;
 using DosboxLauncher.Main;
@@ -10,24 +11,26 @@ namespace DosboxLauncher.Startup;
 
 public sealed class App : Application
 {
+    private static readonly string BaseDirectory = AppContext.BaseDirectory;
+    private static readonly Dispatcher Dispatcher = Dispatcher.UIThread;
+    private static readonly StrongReferenceMessenger Messenger = StrongReferenceMessenger.Default;
+
     private readonly DosboxRunner _dosboxRunner;
     private readonly DosboxState _dosboxState;
-    private readonly StrongReferenceMessenger _messenger;
     private readonly ProgramLoader _programLoader;
 
     public App()
     {
         _dosboxState = new DosboxState();
-        _messenger = StrongReferenceMessenger.Default;
-        _programLoader = new ProgramLoader(AppContext.BaseDirectory, _messenger);
-        _dosboxRunner = new DosboxRunner(AppContext.BaseDirectory, _dosboxState);
+        _programLoader = new ProgramLoader(BaseDirectory, Messenger, Dispatcher);
+        _dosboxRunner = new DosboxRunner(BaseDirectory, _dosboxState, Dispatcher);
     }
 
     private MainWindow CreateWindow()
     {
         return new MainWindow
         {
-            DataContext = new MainWindowViewModel(_messenger, _dosboxState)
+            DataContext = new MainWindowViewModel(Messenger, _dosboxState)
         };
     }
 
@@ -44,10 +47,10 @@ public sealed class App : Application
             desktop.Exit += OnDesktopExit;
         }
 
-        _messenger.Register<ProgramLoaderStartRequestMessage>(this, OnProgramLoaderStartRequestMessageReceived);
-        _messenger.Register<ProgramLoaderStopRequestMessage>(this, OnProgramLoaderStopRequestMessageReceived);
-        _messenger.Register<DosboxStartRequestMessage>(this, OnDosboxStartRequestMessageReceived);
-        _messenger.Register<DosboxStopRequestMessage>(this, OnDosboxStopRequestMessageReceived);
+        Messenger.Register<ProgramLoaderStartRequestMessage>(this, OnProgramLoaderStartRequestMessageReceived);
+        Messenger.Register<ProgramLoaderStopRequestMessage>(this, OnProgramLoaderStopRequestMessageReceived);
+        Messenger.Register<DosboxStartRequestMessage>(this, OnDosboxStartRequestMessageReceived);
+        Messenger.Register<DosboxStopRequestMessage>(this, OnDosboxStopRequestMessageReceived);
 
         base.OnFrameworkInitializationCompleted();
     }
@@ -77,6 +80,6 @@ public sealed class App : Application
     private void OnDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
         _dosboxRunner.Kill();
-        _messenger.UnregisterAll(this);
+        Messenger.UnregisterAll(this);
     }
 }
