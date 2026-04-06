@@ -28,15 +28,15 @@
             CornerRadius="12"
             VerticalAlignment="Top"
             Background="Transparent"
-            IsEnabled="{Binding IsActive}"
-            Command="{Binding Command}"
+            IsEnabled="{Binding CanStart}"
+            Command="{Binding StartCommand}"
             CommandParameter="{Binding Program}">
         <StackPanel Spacing="16" Width="171">
             <!-- The default size of GOG cards is 342x482 -->
             <main:RoundedImage Radius="12"
                                MaxWidth="171"
                                MaxHeight="241"
-                               IsEnabled="{Binding IsActive}"
+                               IsEnabled="{Binding CanStart}"
                                Source="{Binding Program.ImagePath, 
                                                 Converter={StaticResource PathToImageConverter},
                                                 FallbackValue={StaticResource CardFallbackImage},

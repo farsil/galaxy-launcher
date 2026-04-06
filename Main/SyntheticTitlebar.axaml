@@ -27,17 +27,17 @@
                 Spacing="4"
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
-        <Button Content="🗕"
+        <Button x:Name="MinimizeButton"
+                Content="🗕"
                 Padding="0 0 0 4"
-                Click="OnMinimizeButtonClick"
-                x:Name="MinimizeButton" />
-        <Button Content="🗖"
+                Click="HandleMinimizeButtonClick" />
+        <Button x:Name="MaximizeToggleButton"
+                Content="🗖"
                 Padding="0 0 0 2"
-                Click="OnMaximizeToggleButtonClick"
-                x:Name="MaximizeToggleButton" />
-        <Button Content="✕"
+                Click="HandleMaximizeToggleButtonClick" />
+        <Button x:Name="CloseButton"
+                Content="✕"
                 Padding="0"
-                Click="OnCloseButtonClick"
-                x:Name="CloseButton" />
+                Click="HandleCloseButtonClick" />
     </StackPanel>
 </UserControl>

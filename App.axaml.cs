@@ -44,40 +44,40 @@ public sealed class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = CreateWindow();
-            desktop.Exit += OnDesktopExit;
+            desktop.Exit += HandleDesktopExit;
         }
 
-        Messenger.Register<ProgramLoaderStartRequestMessage>(this, OnProgramLoaderStartRequestMessageReceived);
-        Messenger.Register<ProgramLoaderStopRequestMessage>(this, OnProgramLoaderStopRequestMessageReceived);
-        Messenger.Register<DosboxStartRequestMessage>(this, OnDosboxStartRequestMessageReceived);
-        Messenger.Register<DosboxStopRequestMessage>(this, OnDosboxStopRequestMessageReceived);
+        Messenger.Register<ProgramLoaderStartRequestMessage>(this, HandleProgramLoaderStartRequest);
+        Messenger.Register<ProgramLoaderStopRequestMessage>(this, HandleProgramLoaderStopRequest);
+        Messenger.Register<DosboxStartRequestMessage>(this, HandleDosboxStartRequest);
+        Messenger.Register<DosboxStopRequestMessage>(this, HandleDosboxStopRequest);
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void OnDosboxStartRequestMessageReceived(object recipient, DosboxStartRequestMessage message)
+    private void HandleDosboxStartRequest(object recipient, DosboxStartRequestMessage message)
     {
         _dosboxRunner.Start(message.Program);
     }
 
-    private void OnDosboxStopRequestMessageReceived(object recipient, DosboxStopRequestMessage message)
+    private void HandleDosboxStopRequest(object recipient, DosboxStopRequestMessage message)
     {
         _dosboxRunner.Kill();
         _dosboxRunner.WaitForExit();
     }
 
-    private void OnProgramLoaderStartRequestMessageReceived(object recipient, ProgramLoaderStartRequestMessage message)
+    private void HandleProgramLoaderStartRequest(object recipient, ProgramLoaderStartRequestMessage message)
     {
         _programLoader.Start();
     }
 
-    private void OnProgramLoaderStopRequestMessageReceived(object recipient, ProgramLoaderStopRequestMessage message)
+    private void HandleProgramLoaderStopRequest(object recipient, ProgramLoaderStopRequestMessage message)
     {
         _programLoader.RequestStop();
         _programLoader.Join();
     }
 
-    private void OnDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    private void HandleDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
         _dosboxRunner.Kill();
         Messenger.UnregisterAll(this);

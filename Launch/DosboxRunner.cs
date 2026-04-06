@@ -28,7 +28,8 @@ public sealed class DosboxRunner
         if (_dosboxState.IsRunnable && (_process == null || _process.HasExited))
         {
             _process = Process.Start(_executablePath, ["--conf", program.ConfigPath, "--working-dir", program.Path]);
-            _process.Exited += OnProcessExited;
+            // Process will be eventually garbage collected, eager event handler cleanup is unnecessary
+            _process.Exited += HandleProcessExited;
             _process.EnableRaisingEvents = true;
             _dosboxState.IsActive = true;
         }
@@ -37,7 +38,7 @@ public sealed class DosboxRunner
     public void Kill()
     {
         if (_process is { HasExited: false })
-            _process?.Kill();
+            _process.Kill();
     }
 
     public void WaitForExit()
@@ -45,7 +46,7 @@ public sealed class DosboxRunner
         _process?.WaitForExit();
     }
 
-    private void OnProcessExited(object? sender, EventArgs e)
+    private void HandleProcessExited(object? sender, EventArgs e)
     {
         _dispatcher.Post(() => _dosboxState.IsActive = false);
     }

@@ -5,23 +5,38 @@ using DosboxLauncher.Launch;
 
 namespace DosboxLauncher.Main;
 
-public sealed class ProgramCardViewModel : ObservableObject
+public sealed class ProgramCardViewModel(Program program, IDosboxState dosboxState) : ObservableObject
 {
-    private readonly IDosboxState _dosboxState;
-
-    public ProgramCardViewModel(Program program, IDosboxState dosboxState)
+    public bool IsActive
     {
-        Program = program;
-        _dosboxState = dosboxState;
-        _dosboxState.PropertyChanged += OnDosboxStatePropertyChanged;
+        set
+        {
+            if (field == value) return;
+            field = value;
+
+            if (value) OnActivated();
+            else OnDeactivated();
+        }
     }
 
-    public bool IsActive => _dosboxState is { IsRunnable: true, IsActive: false };
-    public Program Program { get; }
-    public ICommand? Command { get; init; }
+    public bool CanStart => dosboxState is { IsRunnable: true, IsActive: false };
 
-    private void OnDosboxStatePropertyChanged(object? sender, PropertyChangedEventArgs e)
+    public Program Program => program;
+
+    public ICommand? StartCommand { get; init; }
+
+    private void OnActivated()
     {
-        OnPropertyChanged(nameof(IsActive));
+        dosboxState.PropertyChanged += HandleDosboxStateChanged;
+    }
+
+    private void OnDeactivated()
+    {
+        dosboxState.PropertyChanged -= HandleDosboxStateChanged;
+    }
+
+    private void HandleDosboxStateChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(CanStart));
     }
 }

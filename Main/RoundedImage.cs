@@ -19,42 +19,48 @@ public sealed class RoundedImage : Image
 
     private Window? _window;
 
-    public RoundedImage()
-    {
-        SizeChanged += OnSizeChanged;
-        PropertyChanged += OnPropertyChanged;
-        AttachedToVisualTree += OnAttachedToVisualTree;
-    }
-
     public double Radius
     {
         get => GetValue(RadiusProperty);
         set => SetValue(RadiusProperty, value);
     }
 
-    private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs? e)
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
+        base.OnAttachedToVisualTree(e);
+
         _window = this.FindAncestorOfType<Window>();
         Debug.Assert(_window != null);
 
-        _window.ScalingChanged += OnWindowScalingChanged;
+        _window.ScalingChanged += HandleWindowScalingChanged;
     }
 
-    private void OnWindowScalingChanged(object? sender, EventArgs e)
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        UpdateOpacityMask(DesiredSize);
+        base.OnDetachedFromVisualTree(e);
+
+        _window?.ScalingChanged -= HandleWindowScalingChanged;
     }
 
-    private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e)
     {
+        base.OnPropertyChanged(e);
+
         if (e.Property == IsEnabledProperty)
             UpdateOpacityMask(DesiredSize);
     }
 
-    private void OnSizeChanged(object? sender, SizeChangedEventArgs e)
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
+        base.OnSizeChanged(e);
+
         UpdateClip(e.NewSize);
         UpdateOpacityMask(e.NewSize);
+    }
+
+    private void HandleWindowScalingChanged(object? sender, EventArgs e)
+    {
+        UpdateOpacityMask(DesiredSize);
     }
 
     private void UpdateClip(Size size)

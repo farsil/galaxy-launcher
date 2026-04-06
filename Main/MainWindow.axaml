@@ -28,9 +28,8 @@
             <TextBox Width="256"
                      Watermark="Search..."
                      Text="{Binding SearchText, Mode=TwoWay}" />
-            <main:StopButton
-                IsEnabled="{Binding DosboxState.IsActive}"
-                Command="{Binding StopDosboxCommand}" />
+            <main:StopButton IsEnabled="{Binding DosboxState.IsActive}"
+                             Command="{Binding StopDosboxCommand}" />
             <TextBlock HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        IsVisible="{Binding !DosboxState.IsRunnable}"
@@ -39,18 +38,18 @@
                 Unable to find DOSBox executable!
             </TextBlock>
         </StackPanel>
-
         <Panel>
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Spacing="24"
                         IsVisible="{Binding !HasSearchResults}">
-                <Image Height="120" Width="120" Source="{DynamicResource QuestionMarkImage}" />
-                <TextBlock
-                    FontSize="18"
-                    FontWeight="SemiBold"
-                    Foreground="{DynamicResource SystemBaseMediumColor}"
-                    TextAlignment="Center">
+                <Image Height="120"
+                       Width="120"
+                       Source="{DynamicResource QuestionMarkImage}" />
+                <TextBlock FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource SystemBaseMediumColor}"
+                           TextAlignment="Center">
                     No programs found
                 </TextBlock>
             </StackPanel>

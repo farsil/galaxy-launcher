@@ -9,8 +9,8 @@ namespace DosboxLauncher.ViewService;
 
 public sealed class CheckeredBrushGenerator
 {
-    private const double CheckerSize = 2.0;
-    
+    private const double BaseCheckerSize = 2.0;
+
     // Avalonia uses device-independent DPI scaling where each pixel always occupies 1/96th of an inch
     // https://docs.avaloniaui.net/docs/graphics-animation/drawing-graphics
     private static readonly Vector BaseDpi = new(96, 96);
@@ -32,7 +32,7 @@ public sealed class CheckeredBrushGenerator
     {
         var dpi = BaseDpi * scaling;
         var pixelSize = PixelSize.FromSize(size, scaling);
-        var checkerPixelSize = (int)Math.Ceiling(CheckerSize * scaling);
+        var checkerPixelSize = (int)Math.Ceiling(BaseCheckerSize * scaling);
 
         if (_bitmap is null)
         {

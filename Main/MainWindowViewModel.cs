@@ -12,16 +12,13 @@ namespace DosboxLauncher.Main;
 public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxState dosboxState)
     : ObservableRecipient(messenger), IRecipient<ProgramLoadedMessage>
 {
-    private readonly ObservableCollection<ProgramCardViewModel> _programCardViewModels = [];
+    private readonly List<ProgramCardViewModel> _programCardViewModels = [];
 
     public IDosboxState DosboxState => dosboxState;
 
-    public bool HasSearchResults => SearchResults.Any();
+    [ObservableProperty] public partial bool HasSearchResults { get; set; }
 
-    public IEnumerable<ProgramCardViewModel> SearchResults => _programCardViewModels
-        .Where(vm => string.IsNullOrWhiteSpace(SearchText) ||
-                     vm.Program.Title.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
-        .OrderBy(vm => vm.Program.Title);
+    public ObservableCollection<ProgramCardViewModel> SearchResults { get; private set; } = [];
 
     public string? SearchText
     {
@@ -30,22 +27,51 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
         {
             if (field == value) return;
             field = value;
+
+            // It's more efficient to replace the whole collection and notify the property has changed here
+            SearchResults = new ObservableCollection<ProgramCardViewModel>(
+                _programCardViewModels.Where(ShouldBeIncludedInSearchResults)
+            );
             OnPropertyChanged(nameof(SearchResults));
-            OnPropertyChanged(nameof(HasSearchResults));
+
+            HasSearchResults = SearchResults.Count > 0;
         }
     }
 
     public void Receive(ProgramLoadedMessage message)
     {
-        _programCardViewModels.Add(new ProgramCardViewModel(message.Program, dosboxState)
+        var programCardViewModel = new ProgramCardViewModel(message.Program, dosboxState)
         {
-            Command = StartDosboxCommand
-        });
+            IsActive = true,
+            StartCommand = StartDosboxCommand
+        };
 
-        OnPropertyChanged(nameof(SearchResults));
-        // Only signal that the property is changed if it's the first program loaded
-        if (_programCardViewModels.Count == 1)
-            OnPropertyChanged(nameof(HasSearchResults));
+        AddProgramCardViewModel(_programCardViewModels, programCardViewModel);
+
+        if (ShouldBeIncludedInSearchResults(programCardViewModel))
+        {
+            AddProgramCardViewModel(SearchResults, programCardViewModel);
+            HasSearchResults = true;
+        }
+    }
+
+    private bool ShouldBeIncludedInSearchResults(ProgramCardViewModel programCardViewModel)
+    {
+        return string.IsNullOrWhiteSpace(SearchText) ||
+               programCardViewModel.Program.Title.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    private static void AddProgramCardViewModel(IList<ProgramCardViewModel> list, ProgramCardViewModel item)
+    {
+        // We keep the collection sorted by title, so we don't have to worry about order again
+        foreach (var (index, current) in list.Index())
+            if (StringComparer.CurrentCultureIgnoreCase.Compare(current.Program.Title, item.Program.Title) > 0)
+            {
+                list.Insert(index, item);
+                return;
+            }
+
+        list.Insert(list.Count, item);
     }
 
     [RelayCommand]
@@ -63,12 +89,20 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
     protected override void OnActivated()
     {
         base.OnActivated();
+
+        foreach (var vm in _programCardViewModels)
+            vm.IsActive = true;
+
         Messenger.Send(new ProgramLoaderStartRequestMessage());
     }
 
     protected override void OnDeactivated()
     {
         base.OnDeactivated();
+
+        foreach (var vm in _programCardViewModels)
+            vm.IsActive = false;
+
         Messenger.Send(new ProgramLoaderStopRequestMessage());
     }
 }
