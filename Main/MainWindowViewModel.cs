@@ -16,8 +16,6 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
 
     public IDosboxState DosboxState => dosboxState;
 
-    [ObservableProperty] public partial bool HasSearchResults { get; set; }
-
     public ObservableCollection<ProgramCardViewModel> SearchResults { get; private set; } = [];
 
     public string? SearchText
@@ -33,8 +31,6 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
                 _programCardViewModels.Where(ShouldBeIncludedInSearchResults)
             );
             OnPropertyChanged(nameof(SearchResults));
-
-            HasSearchResults = SearchResults.Count > 0;
         }
     }
 
@@ -49,10 +45,7 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
         AddProgramCardViewModel(_programCardViewModels, programCardViewModel);
 
         if (ShouldBeIncludedInSearchResults(programCardViewModel))
-        {
             AddProgramCardViewModel(SearchResults, programCardViewModel);
-            HasSearchResults = true;
-        }
     }
 
     private bool ShouldBeIncludedInSearchResults(ProgramCardViewModel programCardViewModel)

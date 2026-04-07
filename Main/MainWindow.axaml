@@ -42,7 +42,7 @@
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Spacing="24"
-                        IsVisible="{Binding !HasSearchResults}">
+                        IsVisible="{Binding !SearchResults.Count}">
                 <Image Height="120"
                        Width="120"
                        Source="{DynamicResource QuestionMarkImage}" />
@@ -53,7 +53,7 @@
                     No programs found
                 </TextBlock>
             </StackPanel>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" IsVisible="{Binding HasSearchResults}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" IsVisible="{Binding SearchResults.Count}">
                 <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding SearchResults}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
