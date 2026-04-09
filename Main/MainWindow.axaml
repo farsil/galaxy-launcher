@@ -25,10 +25,12 @@
                     Spacing="12"
                     Margin="24"
                     Height="32">
-            <TextBox Width="256"
+            <TextBox TabIndex="1"
+                     Width="256"
                      Watermark="Search..."
                      Text="{Binding SearchText, Mode=TwoWay}" />
-            <main:StopButton IsEnabled="{Binding DosboxState.IsActive}"
+            <main:StopButton TabIndex="2"
+                             IsEnabled="{Binding DosboxState.IsActive}"
                              Command="{Binding StopDosboxCommand}" />
             <TextBlock HorizontalAlignment="Right"
                        VerticalAlignment="Center"
@@ -53,11 +55,15 @@
                     No programs found
                 </TextBlock>
             </StackPanel>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" IsVisible="{Binding SearchResults.Count}">
+            <ScrollViewer XYFocus.NavigationModes="Enabled"
+                          VerticalScrollBarVisibility="Auto"
+                          IsVisible="{Binding SearchResults.Count}">
                 <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding SearchResults}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Margin="24 16"
+                            <WrapPanel KeyboardNavigation.TabNavigation="Once"
+                                       TabIndex="0"
+                                       Margin="24 16"
                                        LineSpacing="32"
                                        ItemSpacing="32" />
                         </ItemsPanelTemplate>

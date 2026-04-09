@@ -4,7 +4,7 @@
              x:Class="DosboxLauncher.Main.ProgramCard"
              x:DataType="main:ProgramCardViewModel">
     <UserControl.Styles>
-        <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Style Selector="Button:focus /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
         </Style>
         <Style Selector="Button:pressed /template/ ContentPresenter">
@@ -28,9 +28,16 @@
             CornerRadius="12"
             VerticalAlignment="Top"
             Background="Transparent"
+            FocusAdorner="{x:Null}"
             IsEnabled="{Binding CanStart}"
             Command="{Binding StartCommand}"
-            CommandParameter="{Binding Program}">
+            CommandParameter="{Binding Program}"
+            x:Name="Button">
+        <Button.KeyBindings>
+            <KeyBinding Gesture="Enter"
+                        Command="{Binding StartCommand}"
+                        CommandParameter="{Binding Program}" />
+        </Button.KeyBindings>
         <StackPanel Spacing="16" Width="171">
             <!-- The default size of GOG cards is 342x482 -->
             <main:RoundedImage Radius="12"

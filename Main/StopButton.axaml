@@ -3,8 +3,10 @@
              x:Class="DosboxLauncher.Main.StopButton"
              x:Name="Root">
     <Button Background="Transparent"
+            TabIndex="{Binding TabIndex, ElementName=Root}"
             IsEnabled="{Binding IsEnabled, ElementName=Root}"
-            Command="{Binding Command, ElementName=Root}">
+            Command="{Binding Command, ElementName=Root}"
+            Padding="7">
         <Button.Styles>
             <Style Selector="Rectangle">
                 <Setter Property="Fill" Value="{DynamicResource DangerousColor}" />
@@ -28,9 +30,9 @@
                 <Setter Property="Fill" Value="{DynamicResource AccentButtonForegroundDisabled}" />
             </Style>
         </Button.Styles>
-        <Rectangle Width="16" 
-                   Height="16" 
-                   RadiusX="2" 
+        <Rectangle Width="16"
+                   Height="16"
+                   RadiusX="2"
                    RadiusY="2" />
     </Button>
 </UserControl>
