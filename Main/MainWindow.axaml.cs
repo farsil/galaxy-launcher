@@ -1,5 +1,5 @@
-using System;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace DosboxLauncher.Main;
 
@@ -10,16 +10,16 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
     }
 
-    protected override void OnOpened(EventArgs e)
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        base.OnOpened(e);
+        base.OnLoaded(e);
 
         if (DataContext is MainWindowViewModel vm) vm.IsActive = true;
     }
 
-    protected override void OnClosed(EventArgs e)
+    protected override void OnUnloaded(RoutedEventArgs e)
     {
-        base.OnClosed(e);
+        base.OnUnloaded(e);
 
         if (DataContext is MainWindowViewModel vm) vm.IsActive = false;
     }
