@@ -5,8 +5,8 @@
     <Application.Styles>
         <FluentTheme>
             <FluentTheme.Palettes>
-                <ColorPaletteResources x:Key="Light" RegionColor="#EEE" />
-                <ColorPaletteResources x:Key="Dark" RegionColor="#111" />
+                <ColorPaletteResources x:Key="Light" RegionColor="#EEEEEE" Accent="#4444DD" />
+                <ColorPaletteResources x:Key="Dark" RegionColor="#111111" Accent="#4444DD" />
             </FluentTheme.Palettes>
         </FluentTheme>
     </Application.Styles>
@@ -16,11 +16,13 @@
                 <Setter Property="DefaultFocusAdorner">
                     <FocusAdornerTemplate>
                         <Border BorderThickness="2"
-                                BorderBrush="{DynamicResource AccentButtonBackground}"
+                                BorderBrush="{DynamicResource AccentColor}"
                                 CornerRadius="2" />
                     </FocusAdornerTemplate>
                 </Setter>
             </ControlTheme>
+            <SolidColorBrush x:Key="AccentColor" Color="#4444DD" />
+            <SolidColorBrush x:Key="SecondaryColor" Color="#99AAFF" />
             <SolidColorBrush x:Key="DangerousColor" Color="#DD0000" />
             <SolidColorBrush x:Key="DangerousPressedColor" Color="#BB0000" />
             <SolidColorBrush x:Key="DangerousPointerOverColor" Color="#FF4444" />
