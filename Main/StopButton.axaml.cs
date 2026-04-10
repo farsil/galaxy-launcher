@@ -2,7 +2,7 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 
-namespace DosboxLauncher.Main;
+namespace GalaxyLauncher.Main;
 
 public sealed partial class StopButton : UserControl
 {

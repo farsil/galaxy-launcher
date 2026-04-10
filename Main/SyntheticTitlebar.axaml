@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="DosboxLauncher.Main.SyntheticTitlebar"
+             x:Class="GalaxyLauncher.Main.SyntheticTitlebar"
              IsVisible="False">
     <UserControl.Styles>
         <Style Selector="Button:pointerover /template/ ContentPresenter">

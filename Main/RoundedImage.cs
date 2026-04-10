@@ -4,9 +4,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.VisualTree;
-using DosboxLauncher.ViewService;
+using GalaxyLauncher.ViewService;
 
-namespace DosboxLauncher.Main;
+namespace GalaxyLauncher.Main;
 
 public sealed class RoundedImage : Image
 {

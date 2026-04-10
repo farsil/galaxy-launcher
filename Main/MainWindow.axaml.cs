@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace DosboxLauncher.Main;
+namespace GalaxyLauncher.Main;
 
 public sealed partial class MainWindow : Window
 {

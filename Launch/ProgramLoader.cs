@@ -3,9 +3,9 @@ using System.IO;
 using System.Threading;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using DosboxLauncher.Interop.Windows;
+using GalaxyLauncher.Interop.Windows;
 
-namespace DosboxLauncher.Launch;
+namespace GalaxyLauncher.Launch;
 
 public class ProgramLoader
 {

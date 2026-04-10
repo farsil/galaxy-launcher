@@ -1,5 +1,5 @@
 ﻿using System;
 
-namespace DosboxLauncher.Launch;
+namespace GalaxyLauncher.Launch;
 
 public class InvalidProgramConfigException(string message) : Exception(message);

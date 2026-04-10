@@ -1,9 +1,9 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DosboxLauncher.Launch;
+using GalaxyLauncher.Launch;
 
-namespace DosboxLauncher.Main;
+namespace GalaxyLauncher.Main;
 
 public sealed class ProgramCardViewModel(Program program, IDosboxState dosboxState) : ObservableObject
 {

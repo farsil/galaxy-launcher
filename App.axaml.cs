@@ -4,10 +4,10 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using DosboxLauncher.Launch;
-using DosboxLauncher.Main;
+using GalaxyLauncher.Launch;
+using GalaxyLauncher.Main;
 
-namespace DosboxLauncher.Startup;
+namespace GalaxyLauncher.Startup;
 
 public sealed class App : Application
 {

@@ -6,7 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform;
 using Avalonia.VisualTree;
 
-namespace DosboxLauncher.Main;
+namespace GalaxyLauncher.Main;
 
 public sealed partial class SyntheticTitlebar : UserControl
 {

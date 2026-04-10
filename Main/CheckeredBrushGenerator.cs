@@ -5,7 +5,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
-namespace DosboxLauncher.ViewService;
+namespace GalaxyLauncher.ViewService;
 
 public sealed class CheckeredBrushGenerator
 {

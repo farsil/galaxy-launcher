@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace DosboxLauncher.Launch;
+namespace GalaxyLauncher.Launch;
 
 public sealed partial class DosboxState : ObservableObject, IDosboxState
 {

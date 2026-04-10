@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Avalonia.Threading;
-using DosboxLauncher.Interop.Windows;
+using GalaxyLauncher.Interop.Windows;
 
-namespace DosboxLauncher.Launch;
+namespace GalaxyLauncher.Launch;
 
 public sealed class DosboxRunner
 {

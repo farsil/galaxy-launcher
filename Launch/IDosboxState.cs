@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace DosboxLauncher.Launch;
+namespace GalaxyLauncher.Launch;
 
 public interface IDosboxState : INotifyPropertyChanged
 {

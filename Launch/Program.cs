@@ -1,4 +1,4 @@
-namespace DosboxLauncher.Launch;
+namespace GalaxyLauncher.Launch;
 
 public sealed record Program
 {

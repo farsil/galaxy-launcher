@@ -5,9 +5,9 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using DosboxLauncher.Launch;
+using GalaxyLauncher.Launch;
 
-namespace DosboxLauncher.Main;
+namespace GalaxyLauncher.Main;
 
 public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxState dosboxState)
     : ObservableRecipient(messenger), IRecipient<ProgramLoadedMessage>

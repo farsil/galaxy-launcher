@@ -1,9 +1,9 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:main="clr-namespace:DosboxLauncher.Main"
-        x:Class="DosboxLauncher.Main.MainWindow"
+        xmlns:main="clr-namespace:GalaxyLauncher.Main"
+        x:Class="GalaxyLauncher.Main.MainWindow"
         x:DataType="main:MainWindowViewModel"
-        Title="Dosbox Launcher"
+        Title="Galaxy Launcher"
         Width="1024"
         MinWidth="740"
         Height="768"
@@ -12,7 +12,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://DosboxLauncher/Main/QuestionMarkImage.axaml" />
+                <ResourceInclude Source="avares://GalaxyLauncher/Main/QuestionMarkImage.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

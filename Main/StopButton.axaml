@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="DosboxLauncher.Main.StopButton"
+             x:Class="GalaxyLauncher.Main.StopButton"
              x:Name="Root">
     <Button Background="Transparent"
             TabIndex="{Binding TabIndex, ElementName=Root}"

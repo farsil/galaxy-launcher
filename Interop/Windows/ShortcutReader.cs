@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 
-namespace DosboxLauncher.Interop.Windows;
+namespace GalaxyLauncher.Interop.Windows;
 
 [SupportedOSPlatform("windows")]
 internal sealed class ShortcutReader : IDisposable

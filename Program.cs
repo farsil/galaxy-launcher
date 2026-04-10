@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace DosboxLauncher.Startup;
+namespace GalaxyLauncher.Startup;
 
 sealed class Program
 {
