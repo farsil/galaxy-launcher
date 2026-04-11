@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Galaxy Launcher
+Comment=DOSBox programs launcher
+Exec=galaxy-launcher
+Icon=galaxy-launcher
+StartupWMClass=GalaxyLauncher
+Terminal=false
+Categories=Game

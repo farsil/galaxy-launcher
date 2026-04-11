@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -11,7 +12,7 @@ namespace GalaxyLauncher.Startup;
 
 public sealed class App : Application
 {
-    private static readonly string BaseDirectory = AppContext.BaseDirectory;
+    private static readonly string BaseDirectory = GetBaseDirectory();
     private static readonly Dispatcher Dispatcher = Dispatcher.UIThread;
     private static readonly StrongReferenceMessenger Messenger = StrongReferenceMessenger.Default;
 
@@ -24,6 +25,28 @@ public sealed class App : Application
         _dosboxState = new DosboxState();
         _programLoader = new ProgramLoader(BaseDirectory, Messenger, Dispatcher);
         _dosboxRunner = new DosboxRunner(BaseDirectory, _dosboxState, Dispatcher);
+    }
+
+    private static string GetBaseDirectory()
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            // POSIX requires HOME environment variable to be always set
+            var dataHome = Environment.GetEnvironmentVariable("XDG_DATA_HOME") ??
+                           Path.Combine(Environment.GetEnvironmentVariable("HOME")!, ".local/share");
+
+            var homeDir = Path.Combine(dataHome, "galaxy-launcher");
+            if (Directory.Exists(homeDir)) return homeDir;
+
+            var dataDirs = Environment.GetEnvironmentVariable("XDG_DATA_DIRS")?.Split(':') ?? [];
+            foreach (var dataDir in dataDirs)
+            {
+                var systemDir = Path.Combine(dataDir, "galaxy-launcher");
+                if (Directory.Exists(systemDir)) return systemDir;
+            }
+        }
+
+        return Directory.GetCurrentDirectory();
     }
 
     private MainWindow CreateWindow()
