@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -12,48 +10,25 @@ namespace GalaxyLauncher.Startup;
 
 public sealed class App : Application
 {
-    private static readonly string BaseDirectory = GetBaseDirectory();
-    private static readonly Dispatcher Dispatcher = Dispatcher.UIThread;
-    private static readonly StrongReferenceMessenger Messenger = StrongReferenceMessenger.Default;
-
     private readonly DosboxRunner _dosboxRunner;
-    private readonly DosboxState _dosboxState;
+    private readonly DosboxState _dosboxState = new();
+    private readonly StrongReferenceMessenger _messenger = StrongReferenceMessenger.Default;
     private readonly ProgramLoader _programLoader;
 
     public App()
     {
-        _dosboxState = new DosboxState();
-        _programLoader = new ProgramLoader(BaseDirectory, Messenger, Dispatcher);
-        _dosboxRunner = new DosboxRunner(BaseDirectory, _dosboxState, Dispatcher);
-    }
+        var pathFinder = PathFinder.Create();
+        var dispatcher = Dispatcher.UIThread;
 
-    private static string GetBaseDirectory()
-    {
-        if (OperatingSystem.IsLinux())
-        {
-            // POSIX requires HOME environment variable to be always set
-            var dataHome = Environment.GetEnvironmentVariable("XDG_DATA_HOME") ??
-                           Path.Combine(Environment.GetEnvironmentVariable("HOME")!, ".local/share");
-
-            var homeDir = Path.Combine(dataHome, "galaxy-launcher");
-            if (Directory.Exists(homeDir)) return homeDir;
-
-            var dataDirs = Environment.GetEnvironmentVariable("XDG_DATA_DIRS")?.Split(':') ?? [];
-            foreach (var dataDir in dataDirs)
-            {
-                var systemDir = Path.Combine(dataDir, "galaxy-launcher");
-                if (Directory.Exists(systemDir)) return systemDir;
-            }
-        }
-
-        return Directory.GetCurrentDirectory();
+        _programLoader = new ProgramLoader(pathFinder, _messenger, dispatcher);
+        _dosboxRunner = new DosboxRunner(pathFinder, _dosboxState, dispatcher);
     }
 
     private MainWindow CreateWindow()
     {
         return new MainWindow
         {
-            DataContext = new MainWindowViewModel(Messenger, _dosboxState)
+            DataContext = new MainWindowViewModel(_messenger, _dosboxState)
         };
     }
 
@@ -70,10 +45,10 @@ public sealed class App : Application
             desktop.Exit += HandleDesktopExit;
         }
 
-        Messenger.Register<ProgramLoaderStartRequestMessage>(this, HandleProgramLoaderStartRequest);
-        Messenger.Register<ProgramLoaderStopRequestMessage>(this, HandleProgramLoaderStopRequest);
-        Messenger.Register<DosboxStartRequestMessage>(this, HandleDosboxStartRequest);
-        Messenger.Register<DosboxStopRequestMessage>(this, HandleDosboxStopRequest);
+        _messenger.Register<ProgramLoaderStartRequestMessage>(this, HandleProgramLoaderStartRequest);
+        _messenger.Register<ProgramLoaderStopRequestMessage>(this, HandleProgramLoaderStopRequest);
+        _messenger.Register<DosboxStartRequestMessage>(this, HandleDosboxStartRequest);
+        _messenger.Register<DosboxStopRequestMessage>(this, HandleDosboxStopRequest);
 
         base.OnFrameworkInitializationCompleted();
     }
@@ -103,6 +78,6 @@ public sealed class App : Application
     private void HandleDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
         _dosboxRunner.Kill();
-        Messenger.UnregisterAll(this);
+        _messenger.UnregisterAll(this);
     }
 }

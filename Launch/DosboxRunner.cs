@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Avalonia.Threading;
-using GalaxyLauncher.Interop.Windows;
 
 namespace GalaxyLauncher.Launch;
 
@@ -13,15 +12,22 @@ public sealed class DosboxRunner
     private readonly string _executablePath;
     private Process? _process;
 
-    public DosboxRunner(string baseDirectory, IDosboxState dosboxState, IDispatcher dispatcher)
+    public DosboxRunner(IPathFinder pathFinder, IDosboxState dosboxState, IDispatcher dispatcher)
     {
         _dosboxState = dosboxState;
         _dispatcher = dispatcher;
-        _executablePath = GetDosboxExecutablePath(baseDirectory);
+        _executablePath = GetExecutablePath(pathFinder);
         _dosboxState.IsRunnable = File.Exists(_executablePath);
     }
 
-    private static string ExecutableName => OperatingSystem.IsWindows() ? "dosbox.exe" : "dosbox";
+    private static string GetExecutablePath(IPathFinder pathFinder)
+    {
+        var dosboxPath = pathFinder.Find("dosbox");
+        if (dosboxPath == null) return "";
+
+        var executableName = OperatingSystem.IsWindows() ? "dosbox.exe" : "dosbox";
+        return Path.Combine(dosboxPath, executableName);
+    }
 
     public void Start(Program program)
     {
@@ -49,21 +55,5 @@ public sealed class DosboxRunner
     private void HandleProcessExited(object? sender, EventArgs e)
     {
         _dispatcher.Post(() => _dosboxState.IsActive = false);
-    }
-
-    private static string GetDosboxExecutablePath(string baseDirectory)
-    {
-        if (OperatingSystem.IsWindows())
-        {
-            var shortcutPath = Path.Combine(baseDirectory, "dosbox.lnk");
-            if (File.Exists(shortcutPath))
-            {
-                using var shortcutReader = new ShortcutReader();
-                shortcutReader.Load(shortcutPath);
-                return Path.Combine(shortcutReader.GetPath(), ExecutableName);
-            }
-        }
-
-        return Path.Combine(baseDirectory, "dosbox", ExecutableName);
     }
 }

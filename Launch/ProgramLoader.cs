@@ -9,17 +9,18 @@ namespace GalaxyLauncher.Launch;
 
 public class ProgramLoader
 {
-    private readonly string _baseDirectory;
     private readonly IDispatcher _dispatcher;
     private readonly IMessenger _messenger;
+    private readonly IPathFinder _pathFinder;
     private readonly Thread _thread;
     private volatile bool _shouldStop;
 
-    public ProgramLoader(string baseDirectory, IMessenger messenger, IDispatcher dispatcher)
+    public ProgramLoader(IPathFinder pathFinder, IMessenger messenger, IDispatcher dispatcher)
     {
+        _pathFinder = pathFinder;
         _messenger = messenger;
         _dispatcher = dispatcher;
-        _baseDirectory = baseDirectory;
+
         _shouldStop = false;
         _thread = new Thread(Run);
     }
@@ -89,8 +90,8 @@ public class ProgramLoader
 
     private void Run()
     {
-        var programsPath = GetProgramsPath(_baseDirectory);
-        if (!Directory.Exists(programsPath)) return;
+        var programsPath = _pathFinder.Find("programs");
+        if (programsPath == null) return;
 
         foreach (var directory in Directory.EnumerateDirectories(programsPath))
         {
