@@ -1,4 +1,4 @@
-.PHONY: help all install uninstall clean install-png install-exec install-desktop install-data uninstall-png uninstall-exec uninstall-desktop uninstall-data
+.PHONY: help install uninstall install-png install-exec install-desktop uninstall-png uninstall-exec uninstall-desktop 
 
 prefix = /usr/local
 exec_prefix = $(prefix)
@@ -13,7 +13,26 @@ assets_dir = assets
 app_name = galaxy-launcher
 
 help:
-	@echo "TODO: write help text"
+	@echo "Galaxy Launcher linux distribution Makefile"
+	@echo ""
+	@echo "Targets:"
+	@echo "  help                Show this help text"
+	@echo "  install             Install icons, executable, and desktop entry"
+	@echo "  install-png         Install application icons"
+	@echo "  install-exec        Install executable"
+	@echo "  install-desktop     Install desktop file"
+	@echo "  uninstall           Remove icons, executable, and desktop entry"
+	@echo "  uninstall-png       Remove application icons"
+	@echo "  uninstall-exec      Remove executable"
+	@echo "  uninstall-desktop   Remove desktop file"
+	@echo ""
+	@echo "Default prefix is /usr/local as per Makefile conventions."
+	@echo ""
+	@echo "Examples:"
+	@echo "  make install"
+	@echo "  make install DESTDIR=/tmp/pkgroot"
+	@echo "  make install prefix=~/.local"
+	@echo "  make uninstall prefix=/usr"
 
 install-png: 
 	mkdir -m 0755 -p "$(DESTDIR)$(icondir)/hicolor/16x16/apps/"
@@ -48,12 +67,7 @@ install-desktop:
 	mkdir -m 0755 -p "$(DESTDIR)$(appdir)"
 	install -p -m 0644 "$(app_name).desktop" "$(DESTDIR)$(appdir)/$(app_name).desktop"
 
-install-data:
-	mkdir -m 0755 -p "$(DESTDIR)$(datadir)"
-	mkdir -m 0700 -p "$(DESTDIR)$(datadir)/$(app_name)"
-	install -p -m 0644 "USAGE.md" "$(DESTDIR)$(datadir)/$(app_name)/USAGE.md"
-	
-install: install-png install-exec install-desktop install-data
+install: install-png install-exec install-desktop 
 	        
 uninstall-png:
 	rm -f "$(DESTDIR)$(icondir)/hicolor/16x16/apps/$(app_name).png"
@@ -72,8 +86,5 @@ uninstall-exec:
 
 uninstall-desktop: 
 	rm -f "$(DESTDIR)$(appdir)/$(app_name).desktop"
-	
-uninstall-data:
-	rm -f "$(DESTDIR)$(datadir)/$(app_name)/USAGE.md"
 
-uninstall: uninstall-png uninstall-exec uninstall-desktop uninstall-data
+uninstall: uninstall-png uninstall-exec uninstall-desktop 

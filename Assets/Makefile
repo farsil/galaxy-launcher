@@ -1,7 +1,7 @@
 .PHONY: png ico clean all
 
 png_dir = png
-ico_dir = ../Assets
+ico_dir = .
 icon_file = icon.svg
 icon_file_sm = icon-small.svg
 app_name = galaxy-launcher
