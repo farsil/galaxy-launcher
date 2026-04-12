@@ -1,8 +1,12 @@
 # Galaxy Launcher
 
 Galaxy Launcher is a desktop frontend for DOSBox that discovers games/applications from the filesystem and starts them
-with their own DOSBox configuration. It is designed to be directory-driven: place DOSBox and your programs in expected
-locations, and the launcher picks them up automatically.
+with their own DOSBox configuration. 
+
+<img width="1086" height="866" alt="image" src="https://github.com/user-attachments/assets/86363097-7a69-4d29-b85a-e2cf296cc56a" />
+
+It is designed to be directory-driven: place DOSBox and your programs in expected locations, and the launcher picks
+them up automatically.
 
 It currently supports both Windows and Linux. It should in theory work on macOS as well, but I do not have a Mac to
 test it on; hence it is unsupported.
@@ -12,10 +16,11 @@ test it on; hence it is unsupported.
 This project was built using .NET 10.0 and AvaloniaUI, with minimal extra dependencies, so building the application
 itself is pretty straightforward.
 
-If you need to alter the application icon, you have to rebuild the icon assets as well. Run `make` from the `Assets/`
+If you need to alter the application icon, you have to rebuild the icon assets as well. Run `make` from the `Assets`
 folder to do that.
 
-Linux distribution files are present in the `Dist/` folder. Run `make install` from there to install the launcher.
+Linux distribution files are present in the `Dist` folder. Run `make install` from there to install the launcher after
+you've built the main executable.
 
 ## Configuration
 
