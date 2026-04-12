@@ -1,0 +1,99 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  publish-linux-x64:
+    name: Publish for Linux (x64)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish
+        run: |
+          dotnet publish \
+            -r linux-x64 \
+            --no-self-contained \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -o publish/linux-x64
+
+      - name: Create tarball
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          mkdir -p staging/assets
+          cp publish/linux-x64/GalaxyLauncher staging/galaxy-launcher
+          cp Dist/install.sh staging/
+          cp Dist/galaxy-launcher.desktop staging/
+          cp Dist/Makefile staging/
+          cp -r Assets/png staging/assets/
+          cp Assets/icon.svg staging/assets/
+          tar -czf "galaxy-launcher-${TAG}-linux-x64.tar.gz" -C staging .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-release
+          path: galaxy-launcher-*-linux-x64.tar.gz
+
+  publish-windows-x64:
+    name: Publish for Windows (x64)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish
+        run: |
+          dotnet publish `
+            -r win-x64 `
+            --no-self-contained `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -o publish/win-x64
+
+      - name: Create zip file
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          Compress-Archive -Path "publish/win-x64/GalaxyLauncher.exe" `
+            -DestinationPath "galaxy-launcher-${tag}-windows-x64.zip"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-release
+          path: galaxy-launcher-*-windows-x64.zip
+
+  release:
+    name: Create GitHub release
+    needs: [publish-linux-x64, publish-windows-x64]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          merge-multiple: true
+
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            galaxy-launcher-*-linux-x64.tar.gz
+            galaxy-launcher-*-windows-x64.zip
