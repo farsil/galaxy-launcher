@@ -18,7 +18,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://GalaxyLauncher/Main/CardFallbackImage.axaml" />
+                <ResourceInclude Source="avares://GalaxyLauncher/Main/FallbackCardImage.axaml" />
             </ResourceDictionary.MergedDictionaries>
             <main:PathToImageConverter x:Key="PathToImageConverter" />
         </ResourceDictionary>
@@ -46,8 +46,8 @@
                                IsEnabled="{Binding CanStart}"
                                Source="{Binding Program.ImagePath, 
                                                 Converter={StaticResource PathToImageConverter},
-                                                FallbackValue={StaticResource CardFallbackImage},
-                                                TargetNullValue={StaticResource CardFallbackImage}}" />
+                                                FallbackValue={StaticResource FallbackCardImage},
+                                                TargetNullValue={StaticResource FallbackCardImage}}" />
             <TextBlock Text="{Binding Program.Title}"
                        FontSize="14"
                        FontWeight="SemiBold"
