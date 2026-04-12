@@ -2,8 +2,8 @@
 
 png_dir = png
 ico_dir = .
-icon_file = icon.svg
-icon_file_sm = icon-small.svg
+icon_file = saturn.svg
+icon_file_sm = saturn-simple.svg
 app_name = galaxy-launcher
 
 all: png ico 
@@ -49,7 +49,7 @@ ico: png
 	           $(png_dir)/icon-24.png \
 	           $(png_dir)/icon-20.png \
 	           $(png_dir)/icon-16.png \
-	        -o $(ico_dir)/app-icon.ico
+	        -o $(ico_dir)/icon.ico
 
 clean:
 	rm -rf "$(png_dir)"
