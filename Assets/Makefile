@@ -2,8 +2,8 @@
 
 png_dir = png
 ico_dir = .
-icon_file = saturn.svg
-icon_file_sm = saturn-simple.svg
+icon_file = icon.svg
+icon_file_sm = icon-simple.svg
 app_name = galaxy-launcher
 
 all: png ico 
