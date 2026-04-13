@@ -17,11 +17,7 @@ public interface IDosboxProcess : INotifyPropertyChanged
 
     public bool Start(Program program);
 
-    public void Kill();
-
     public bool Terminate();
-
-    public void WaitForExit();
 }
 
 public class DosboxProcess : IDosboxProcess, IDisposable
@@ -64,12 +60,6 @@ public class DosboxProcess : IDosboxProcess, IDisposable
         return true;
     }
 
-    public void Kill()
-    {
-        if (_process == null || _process.HasExited) return;
-        _process.Kill();
-    }
-
     public bool Terminate()
     {
         if (_process == null || _process.HasExited) return false;
@@ -78,9 +68,15 @@ public class DosboxProcess : IDosboxProcess, IDisposable
             : _process.CloseMainWindow();
     }
 
-    public void WaitForExit()
+    public void Kill()
     {
-        _process?.WaitForExit();
+        if (_process == null || _process.HasExited) return;
+        _process.Kill();
+    }
+
+    public bool WaitForExit(int milliseconds = -1)
+    {
+        return _process?.WaitForExit(milliseconds) ?? true;
     }
 
     private void OnExited(object? sender, EventArgs e)

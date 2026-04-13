@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -10,6 +12,9 @@ namespace GalaxyLauncher.Startup;
 
 public sealed class App : Application
 {
+    private const int TerminationTimeoutMs = 3000;
+
+    private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
     private readonly DosboxProcess _dosboxProcess;
     private readonly StrongReferenceMessenger _messenger = StrongReferenceMessenger.Default;
     private readonly ProgramLoader _programLoader;
@@ -17,10 +22,9 @@ public sealed class App : Application
     public App()
     {
         var pathFinder = PathFinder.Create();
-        var dispatcher = Dispatcher.UIThread;
 
-        _programLoader = new ProgramLoader(pathFinder, _messenger, dispatcher);
-        _dosboxProcess = new DosboxProcess(pathFinder, dispatcher);
+        _programLoader = new ProgramLoader(pathFinder, _messenger, _dispatcher);
+        _dosboxProcess = new DosboxProcess(pathFinder, _dispatcher);
     }
 
     private MainWindow CreateWindow()
@@ -42,6 +46,8 @@ public sealed class App : Application
         {
             desktop.MainWindow = CreateWindow();
             desktop.Exit += HandleDesktopExit;
+            PosixSignalRegistration.Create(PosixSignal.SIGTERM, HandleTerminationSignal);
+            PosixSignalRegistration.Create(PosixSignal.SIGINT, HandleTerminationSignal);
         }
 
         _messenger.Register<ProgramLoaderStartRequestMessage>(this, HandleProgramLoaderStartRequest);
@@ -61,11 +67,24 @@ public sealed class App : Application
         _programLoader.Join();
     }
 
+    private void HandleTerminationSignal(PosixSignalContext context)
+    {
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+
+        Console.WriteLine($"Received {context.Signal}, requesting shutdown");
+
+        context.Cancel = true;
+        _dispatcher.Post(() => desktop.TryShutdown());
+    }
+
     private void HandleDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-        if (!_dosboxProcess.Terminate()) _dosboxProcess.Kill();
-        _dosboxProcess.WaitForExit();
+        if (_dosboxProcess.HasExited) return;
 
-        _messenger.UnregisterAll(this);
+        Console.WriteLine("Stopping DOSBox");
+
+        _dosboxProcess.Terminate();
+        if (!_dosboxProcess.WaitForExit(TerminationTimeoutMs))
+            _dosboxProcess.Kill();
     }
 }

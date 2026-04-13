@@ -27,15 +27,15 @@ public sealed class ProgramCardViewModel(Program program, IDosboxProcess dosboxP
 
     private void OnActivated()
     {
-        dosboxProcess.PropertyChanged += HandleDosboxStateChanged;
+        dosboxProcess.PropertyChanged += HandleDosboxProcessPropertyChanged;
     }
 
     private void OnDeactivated()
     {
-        dosboxProcess.PropertyChanged -= HandleDosboxStateChanged;
+        dosboxProcess.PropertyChanged -= HandleDosboxProcessPropertyChanged;
     }
 
-    private void HandleDosboxStateChanged(object? sender, PropertyChangedEventArgs e)
+    private void HandleDosboxProcessPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         OnPropertyChanged(nameof(CanStart));
     }

@@ -76,8 +76,7 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxPro
     [RelayCommand]
     private void StopDosbox()
     {
-        if (!DosboxProcess.Terminate()) DosboxProcess.Kill();
-        DosboxProcess.WaitForExit();
+        DosboxProcess.Terminate();
     }
 
     protected override void OnActivated()
