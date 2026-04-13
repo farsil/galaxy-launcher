@@ -7,7 +7,7 @@ using System.Text;
 namespace GalaxyLauncher.Interop.Windows;
 
 [SupportedOSPlatform("windows")]
-internal sealed class ShortcutReader : IDisposable
+public sealed class ShortcutReader : IDisposable
 {
     private const uint STGM_READ = 0;
     private const uint SLGP_DEFAULT = 0;

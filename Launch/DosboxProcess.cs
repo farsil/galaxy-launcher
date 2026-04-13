@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Avalonia.Threading;
+using GalaxyLauncher.Interop.Linux;
 
 namespace GalaxyLauncher.Launch;
 
@@ -46,6 +48,8 @@ public class DosboxProcess : IDosboxProcess, IDisposable
 
     public bool CanStart { get; }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+
     public bool Start(Program program)
     {
         if (!CanStart || !HasExited) return false;
@@ -69,15 +73,15 @@ public class DosboxProcess : IDosboxProcess, IDisposable
     public bool Terminate()
     {
         if (_process == null || _process.HasExited) return false;
-        return _process.CloseMainWindow();
+        return OperatingSystem.IsLinux()
+            ? Posix.Kill(_process.Id, PosixSignal.SIGTERM)
+            : _process.CloseMainWindow();
     }
 
     public void WaitForExit()
     {
         _process?.WaitForExit();
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnExited(object? sender, EventArgs e)
     {
