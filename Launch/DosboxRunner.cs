@@ -54,6 +54,9 @@ public sealed class DosboxRunner
 
     private void HandleProcessExited(object? sender, EventArgs e)
     {
-        _dispatcher.Post(() => _dosboxState.IsActive = false);
+        _dispatcher.Post(
+            () => _dosboxState.IsActive = false,
+            DispatcherPriority.Background
+        );
     }
 }

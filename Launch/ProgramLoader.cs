@@ -108,7 +108,10 @@ public class ProgramLoader
                     ImagePath = GetImagePath(directory)
                 };
 
-                _dispatcher.Post(() => _messenger.Send(new ProgramLoadedMessage(program)));
+                _dispatcher.Post(
+                    () => _messenger.Send(new ProgramLoadedMessage(program)),
+                    DispatcherPriority.Background
+                );
             }
             catch (InvalidProgramConfigException ex)
             {
