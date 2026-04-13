@@ -5,7 +5,7 @@ using GalaxyLauncher.Launch;
 
 namespace GalaxyLauncher.Main;
 
-public sealed class ProgramCardViewModel(Program program, IDosboxState dosboxState) : ObservableObject
+public sealed class ProgramCardViewModel(Program program, IDosboxProcess dosboxProcess) : ObservableObject
 {
     public bool IsActive
     {
@@ -19,7 +19,7 @@ public sealed class ProgramCardViewModel(Program program, IDosboxState dosboxSta
         }
     }
 
-    public bool CanStart => dosboxState is { IsRunnable: true, IsActive: false };
+    public bool CanStart => dosboxProcess is { CanStart: true, HasExited: true };
 
     public Program Program => program;
 
@@ -27,12 +27,12 @@ public sealed class ProgramCardViewModel(Program program, IDosboxState dosboxSta
 
     private void OnActivated()
     {
-        dosboxState.PropertyChanged += HandleDosboxStateChanged;
+        dosboxProcess.PropertyChanged += HandleDosboxStateChanged;
     }
 
     private void OnDeactivated()
     {
-        dosboxState.PropertyChanged -= HandleDosboxStateChanged;
+        dosboxProcess.PropertyChanged -= HandleDosboxStateChanged;
     }
 
     private void HandleDosboxStateChanged(object? sender, PropertyChangedEventArgs e)

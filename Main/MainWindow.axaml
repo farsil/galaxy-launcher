@@ -30,11 +30,11 @@
                      Watermark="Search..."
                      Text="{Binding SearchText, Mode=TwoWay}" />
             <main:StopButton TabIndex="2"
-                             IsEnabled="{Binding DosboxState.IsActive}"
+                             IsEnabled="{Binding !DosboxProcess.HasExited}"
                              Command="{Binding StopDosboxCommand}" />
             <TextBlock HorizontalAlignment="Right"
                        VerticalAlignment="Center"
-                       IsVisible="{Binding !DosboxState.IsRunnable}"
+                       IsVisible="{Binding !DosboxProcess.CanStart}"
                        Foreground="{DynamicResource DangerousColor}"
                        FontWeight="SemiBold">
                 Unable to find DOSBox executable!

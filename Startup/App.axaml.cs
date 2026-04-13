@@ -10,8 +10,7 @@ namespace GalaxyLauncher.Startup;
 
 public sealed class App : Application
 {
-    private readonly DosboxRunner _dosboxRunner;
-    private readonly DosboxState _dosboxState = new();
+    private readonly DosboxProcess _dosboxProcess;
     private readonly StrongReferenceMessenger _messenger = StrongReferenceMessenger.Default;
     private readonly ProgramLoader _programLoader;
 
@@ -21,14 +20,14 @@ public sealed class App : Application
         var dispatcher = Dispatcher.UIThread;
 
         _programLoader = new ProgramLoader(pathFinder, _messenger, dispatcher);
-        _dosboxRunner = new DosboxRunner(pathFinder, _dosboxState, dispatcher);
+        _dosboxProcess = new DosboxProcess(pathFinder, dispatcher);
     }
 
     private MainWindow CreateWindow()
     {
         return new MainWindow
         {
-            DataContext = new MainWindowViewModel(_messenger, _dosboxState)
+            DataContext = new MainWindowViewModel(_messenger, _dosboxProcess)
         };
     }
 
@@ -47,21 +46,8 @@ public sealed class App : Application
 
         _messenger.Register<ProgramLoaderStartRequestMessage>(this, HandleProgramLoaderStartRequest);
         _messenger.Register<ProgramLoaderStopRequestMessage>(this, HandleProgramLoaderStopRequest);
-        _messenger.Register<DosboxStartRequestMessage>(this, HandleDosboxStartRequest);
-        _messenger.Register<DosboxStopRequestMessage>(this, HandleDosboxStopRequest);
 
         base.OnFrameworkInitializationCompleted();
-    }
-
-    private void HandleDosboxStartRequest(object recipient, DosboxStartRequestMessage message)
-    {
-        _dosboxRunner.Start(message.Program);
-    }
-
-    private void HandleDosboxStopRequest(object recipient, DosboxStopRequestMessage message)
-    {
-        _dosboxRunner.Kill();
-        _dosboxRunner.WaitForExit();
     }
 
     private void HandleProgramLoaderStartRequest(object recipient, ProgramLoaderStartRequestMessage message)
@@ -77,7 +63,9 @@ public sealed class App : Application
 
     private void HandleDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-        _dosboxRunner.Kill();
+        if (!_dosboxProcess.Terminate()) _dosboxProcess.Kill();
+        _dosboxProcess.WaitForExit();
+
         _messenger.UnregisterAll(this);
     }
 }

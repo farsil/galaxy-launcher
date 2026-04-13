@@ -9,12 +9,12 @@ using GalaxyLauncher.Launch;
 
 namespace GalaxyLauncher.Main;
 
-public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxState dosboxState)
+public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxProcess dosboxProcess)
     : ObservableRecipient(messenger), IRecipient<ProgramLoadedMessage>
 {
     private readonly List<ProgramCardViewModel> _programCardViewModels = [];
 
-    public IDosboxState DosboxState => dosboxState;
+    public IDosboxProcess DosboxProcess => dosboxProcess;
 
     public ObservableCollection<ProgramCardViewModel> SearchResults { get; private set; } = [];
 
@@ -36,7 +36,7 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
 
     public void Receive(ProgramLoadedMessage message)
     {
-        var programCardViewModel = new ProgramCardViewModel(message.Program, dosboxState)
+        var programCardViewModel = new ProgramCardViewModel(message.Program, dosboxProcess)
         {
             IsActive = true,
             StartCommand = StartDosboxCommand
@@ -70,13 +70,14 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxSta
     [RelayCommand]
     private void StartDosbox(Program program)
     {
-        Messenger.Send(new DosboxStartRequestMessage(program));
+        DosboxProcess.Start(program);
     }
 
     [RelayCommand]
     private void StopDosbox()
     {
-        Messenger.Send(new DosboxStopRequestMessage());
+        if (!DosboxProcess.Terminate()) DosboxProcess.Kill();
+        DosboxProcess.WaitForExit();
     }
 
     protected override void OnActivated()
