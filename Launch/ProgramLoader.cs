@@ -3,11 +3,26 @@ using System.IO;
 using System.Threading;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using GalaxyLauncher.Interop.Windows;
 
 namespace GalaxyLauncher.Launch;
 
-public class ProgramLoader
+public interface IProgramLoader
+{
+    void Start();
+
+    void Join();
+
+    void RequestStop();
+}
+
+public sealed class ProgramLoadedMessage(Program program)
+{
+    public Program Program { get; } = program;
+}
+
+public sealed class InvalidProgramConfigException(string message) : Exception(message);
+
+public sealed class ProgramLoader : IProgramLoader
 {
     private readonly IDispatcher _dispatcher;
     private readonly IMessenger _messenger;
@@ -70,22 +85,6 @@ public class ProgramLoader
     {
         var paths = Directory.GetFiles(directory, "image.*");
         return paths.Length == 0 ? null : paths[0];
-    }
-
-    private static string GetProgramsPath(string path)
-    {
-        if (OperatingSystem.IsWindows())
-        {
-            var shortcutPath = Path.Combine(path, "programs.lnk");
-            if (File.Exists(shortcutPath))
-            {
-                using var shortcutReader = new ShortcutReader();
-                shortcutReader.Load(shortcutPath);
-                return shortcutReader.GetPath();
-            }
-        }
-
-        return Path.Combine(path, "programs");
     }
 
     private void Run()

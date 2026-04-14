@@ -14,24 +14,28 @@ public sealed class App : Application
 {
     private const int TerminationTimeoutMs = 3000;
 
-    private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
+    private readonly Dispatcher _dispatcher;
     private readonly DosboxProcess _dosboxProcess;
-    private readonly StrongReferenceMessenger _messenger = StrongReferenceMessenger.Default;
-    private readonly ProgramLoader _programLoader;
+    private readonly StrongReferenceMessenger _messenger;
+    private readonly IPathFinder _pathFinder;
 
     public App()
     {
-        var pathFinder = PathFinder.Create();
-
-        _programLoader = new ProgramLoader(pathFinder, _messenger, _dispatcher);
-        _dosboxProcess = new DosboxProcess(pathFinder, _dispatcher);
+        _messenger = StrongReferenceMessenger.Default;
+        _dispatcher = Dispatcher.UIThread;
+        _pathFinder = PathFinder.Create();
+        _dosboxProcess = new DosboxProcess(_pathFinder, _dispatcher);
     }
 
     private MainWindow CreateWindow()
     {
         return new MainWindow
         {
-            DataContext = new MainWindowViewModel(_messenger, _dosboxProcess)
+            DataContext = new MainWindowViewModel(
+                _messenger,
+                _dosboxProcess,
+                new ProgramLoader(_pathFinder, _messenger, _dispatcher)
+            )
         };
     }
 
@@ -50,21 +54,7 @@ public sealed class App : Application
             PosixSignalRegistration.Create(PosixSignal.SIGINT, HandleTerminationSignal);
         }
 
-        _messenger.Register<ProgramLoaderStartRequestMessage>(this, HandleProgramLoaderStartRequest);
-        _messenger.Register<ProgramLoaderStopRequestMessage>(this, HandleProgramLoaderStopRequest);
-
         base.OnFrameworkInitializationCompleted();
-    }
-
-    private void HandleProgramLoaderStartRequest(object recipient, ProgramLoaderStartRequestMessage message)
-    {
-        _programLoader.Start();
-    }
-
-    private void HandleProgramLoaderStopRequest(object recipient, ProgramLoaderStopRequestMessage message)
-    {
-        _programLoader.RequestStop();
-        _programLoader.Join();
     }
 
     private void HandleTerminationSignal(PosixSignalContext context)

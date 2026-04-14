@@ -9,7 +9,10 @@ using GalaxyLauncher.Launch;
 
 namespace GalaxyLauncher.Main;
 
-public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxProcess dosboxProcess)
+public sealed partial class MainWindowViewModel(
+    IMessenger messenger,
+    IDosboxProcess dosboxProcess,
+    IProgramLoader programLoader)
     : ObservableRecipient(messenger), IRecipient<ProgramLoadedMessage>
 {
     private readonly List<ProgramCardViewModel> _programCardViewModels = [];
@@ -86,7 +89,7 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxPro
         foreach (var vm in _programCardViewModels)
             vm.IsActive = true;
 
-        Messenger.Send(new ProgramLoaderStartRequestMessage());
+        programLoader.Start();
     }
 
     protected override void OnDeactivated()
@@ -96,6 +99,7 @@ public sealed partial class MainWindowViewModel(IMessenger messenger, IDosboxPro
         foreach (var vm in _programCardViewModels)
             vm.IsActive = false;
 
-        Messenger.Send(new ProgramLoaderStopRequestMessage());
+        programLoader.RequestStop();
+        programLoader.Join();
     }
 }
