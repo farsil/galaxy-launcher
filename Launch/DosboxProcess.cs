@@ -20,7 +20,7 @@ public interface IDosboxProcess : INotifyPropertyChanged
     public bool Terminate();
 }
 
-public class DosboxProcess : IDosboxProcess, IDisposable
+public sealed class DosboxProcess : IDosboxProcess, IDisposable
 {
     private readonly IDispatcher _dispatcher;
     private readonly string _executablePath;
@@ -37,7 +37,6 @@ public class DosboxProcess : IDosboxProcess, IDisposable
     {
         _process?.Dispose();
         _process = null;
-        GC.SuppressFinalize(this);
     }
 
     public bool HasExited => _process?.HasExited ?? true;
