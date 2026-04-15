@@ -63,7 +63,7 @@ public sealed class DosboxProcess : IDosboxProcess, IDisposable
     {
         if (_process == null || _process.HasExited) return false;
         return OperatingSystem.IsLinux()
-            ? Posix.Kill(_process.Id, PosixSignal.SIGTERM)
+            ? _process.Kill(PosixSignal.SIGTERM)
             : _process.CloseMainWindow();
     }
 
