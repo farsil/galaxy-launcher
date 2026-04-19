@@ -1,6 +1,6 @@
 namespace GalaxyLauncher.Launch;
 
-public sealed record Program
+public sealed class Program
 {
     public required string Title { get; init; }
     
